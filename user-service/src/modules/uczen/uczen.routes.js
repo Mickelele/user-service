@@ -1,14 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const UserController = require('./user.controller');
+const UserController = require('./uczen.controller');
 const authMiddleware = require('../auth/middleware/authMiddleware');
-const { uploadUserImage } = require('./userImage.controller');
-
-
-const upload = multer({ storage: multer.memoryStorage() });
-
-router.post('/uploadImage', authMiddleware, upload.single('file'), uploadUserImage);
 
 router.get('/me', authMiddleware, UserController.getProfile);
 router.put('/updateProfile', authMiddleware, UserController.updateProfile);

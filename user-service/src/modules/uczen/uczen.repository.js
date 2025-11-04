@@ -1,22 +1,13 @@
-const User = require('./user.model');
+const User = require('./uczen.model');
 
-const UserRepository = {
+const UczenRepository = {
     async findById(id, includePassword = false) {
         const attributes = includePassword
             ? ['id_uzytkownika', 'imie', 'nazwisko', 'email', 'rola', 'haslo']
             : ['id_uzytkownika', 'imie', 'nazwisko', 'email', 'rola'];
 
-        return User.findByPk(id, {
-            attributes,
-            include: [
-                {
-                    model: Zdjecie,
-                    as: 'zdjecie',
-                    attributes: ['id_zdjecia', 'nazwa', 'zawartosc']
-                }
-            ] });
+        return User.findByPk(id, { attributes });
     },
-
 
 
     async findByEmail(email) {
@@ -28,4 +19,4 @@ const UserRepository = {
     }
 };
 
-module.exports = UserRepository;
+module.exports = UczenRepository;

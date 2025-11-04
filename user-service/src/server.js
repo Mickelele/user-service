@@ -24,13 +24,13 @@ const PORT = process.env.PORT || 3000;
 (async () => {
     try {
         await sequelize.authenticate();
-        console.log('✅ Połączono z PostgreSQL przez Sequelize!');
+        console.log('Połączono z PostgreSQL przez Sequelize!');
 
         await sequelize.sync();
         console.log('Modele zsynchronizowane');
 
         app.listen(PORT, () => console.log(`Serwer działa na porcie ${PORT}`));
     } catch (err) {
-        console.error('❌ Błąd połączenia z bazą:', err);
+        console.error('Błąd połączenia z bazą:', err);
     }
 })();

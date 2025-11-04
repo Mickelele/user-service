@@ -1,29 +1,11 @@
-const UserService = require('./user.service');
+const UserService = require('./uczen.service');
 
-const UserController = {
+const UczenController = {
     async getProfile(req, res) {
         try {
             const profile = await UserService.getProfile(req.user.id);
-
-            let zdjecie = null;
-            if (profile.zdjecie) {
-                zdjecie = {
-                    nazwa: profile.zdjecie.nazwa,
-                    dane: profile.zdjecie.zawartosc
-                        ? profile.zdjecie.zawartosc.toString('base64')
-                        : null
-                };
-            }
-
-            const { haslo, ...userData } = profile.toJSON();
-
-            res.json({
-                ...userData,
-                zdjecie
-            });
-
+            res.json(profile);
         } catch (err) {
-            console.error('Błąd przy pobieraniu profilu:', err);
             res.status(404).json({ error: err.message });
         }
     },
@@ -48,4 +30,4 @@ const UserController = {
     }
 };
 
-module.exports = UserController;
+module.exports = UczenController;
