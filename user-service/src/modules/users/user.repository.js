@@ -1,4 +1,6 @@
 const User = require('./user.model');
+const Zdjecie = require('../zdjecie/zdjecie.model');
+
 
 const UserRepository = {
     async findById(id, includePassword = false) {
