@@ -12,7 +12,8 @@ const UserRepository = {
                 {
                     model: Zdjecie,
                     as: 'zdjecie',
-                    attributes: ['id_zdjecia', 'nazwa', 'zawartosc']
+                    attributes: ['id_zdjecia', 'nazwa', 'zawartosc'],
+                    required: false
                 }
             ] });
     },
