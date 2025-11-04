@@ -1,5 +1,5 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../../config/db');
+const { sequelize } = require('../../config/db');
 
 class User extends Model {}
 
@@ -13,11 +13,14 @@ User.init({
     nazwisko: { type: DataTypes.STRING, allowNull: false },
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     haslo: { type: DataTypes.STRING, allowNull: false },
-    rola: { type: DataTypes.STRING, allowNull: false }
+    rola: {
+        type: DataTypes.ENUM('uczeń', 'opiekun', 'nauczyciel', 'administrator', 'gość'),
+        allowNull: false,
+    }
 }, {
     sequelize,
     modelName: 'User',
-    tableName: 'Uzytkownik',
+    tableName: 'uzytkownik',
     timestamps: false
 });
 

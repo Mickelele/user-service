@@ -7,7 +7,7 @@ const TOKEN_EXP = '2h';
 
 class AuthService {
     async register({ imie, nazwisko, email, haslo }) {
-        const existing = AuthRepository.findByEmail(email);
+        const existing = await AuthRepository.findByEmail(email);
         if (existing) throw new Error('Email zajęty');
 
         const hashed = await bcrypt.hash(haslo, 10);
