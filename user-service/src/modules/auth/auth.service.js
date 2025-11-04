@@ -1,6 +1,9 @@
+const fs = require('fs');
+const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const AuthRepository = require('./auth.repository');
+const Zdjecie = require('../zdjecie/zdjecie.model'); // 👈 import modelu zdjęcia
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const TOKEN_EXP = '2h';
@@ -10,8 +13,28 @@ class AuthService {
         const existing = await AuthRepository.findByEmail(email);
         if (existing) throw new Error('Email zajęty');
 
+
         const hashed = await bcrypt.hash(haslo, 10);
-        const user = await AuthRepository.createUser({ imie, nazwisko, email, haslo: hashed, rola: 'opiekun' });
+
+
+        const defaultImagePath = path.join(__dirname, '../../assets/default.png');
+        const defaultImageBuffer = fs.readFileSync(defaultImagePath);
+
+        const noweZdjecie = await Zdjecie.create({
+            nazwa: 'default.png',
+            zawartosc: defaultImageBuffer,
+        });
+
+
+        const user = await AuthRepository.createUser({
+            imie,
+            nazwisko,
+            email,
+            haslo: hashed,
+            rola: 'opiekun',
+            id_zdjecia: noweZdjecie.id_zdjecia,
+        });
+
         return { id: user.id_uzytkownika, email: user.email };
     }
 
