@@ -1,7 +1,6 @@
 const User = require('./user.model');
 const Zdjecie = require('../zdjecie/zdjecie.model');
 
-
 const UserRepository = {
     async findById(id, includePassword = false) {
         const attributes = includePassword
@@ -17,13 +16,16 @@ const UserRepository = {
                     attributes: ['id_zdjecia', 'nazwa', 'zawartosc'],
                     required: false
                 }
-            ] });
+            ]
+        });
     },
-
-
 
     async findByEmail(email) {
         return User.findOne({ where: { email } });
+    },
+
+    async createUser(data) {
+        return User.create(data);
     },
 
     async updateUser(user) {

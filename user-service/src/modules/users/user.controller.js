@@ -1,4 +1,5 @@
 const UserService = require('./user.service');
+const bcrypt = require('bcrypt');
 
 const UserController = {
     async getProfile(req, res) {
@@ -16,12 +17,7 @@ const UserController = {
             }
 
             const { haslo, ...userData } = profile.toJSON();
-
-            res.json({
-                ...userData,
-                zdjecie
-            });
-
+            res.json({ ...userData, zdjecie });
         } catch (err) {
             console.error('Błąd przy pobieraniu profilu:', err);
             res.status(404).json({ error: err.message });
@@ -43,6 +39,42 @@ const UserController = {
             const result = await UserService.changePassword(req.user.id, currentPassword, newPassword);
             res.json(result);
         } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+
+    async getUserByEmail(req, res) {
+        try {
+            const { email } = req.params;
+            const user = await UserService.getUserByEmail(email);
+            if (!user) return res.status(404).json({ error: 'Użytkownik nie znaleziony' });
+            res.json(user);
+        } catch (err) {
+            console.error('Błąd przy pobieraniu użytkownika po email:', err);
+            res.status(500).json({ error: 'Błąd serwera' });
+        }
+    },
+
+
+    async createUser(req, res) {
+        try {
+            const { imie, nazwisko, email, haslo, rola } = req.body;
+            const existing = await UserService.getUserByEmail(email);
+            if (existing) return res.status(400).json({ error: 'Email zajęty' });
+
+            const hashed = await bcrypt.hash(haslo, 10);
+            const newUser = await UserService.createUser({
+                imie,
+                nazwisko,
+                email,
+                haslo: hashed,
+                rola
+            });
+
+            res.status(201).json(newUser);
+        } catch (err) {
+            console.error('Błąd przy tworzeniu użytkownika:', err);
             res.status(400).json({ error: err.message });
         }
     }

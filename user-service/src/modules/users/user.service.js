@@ -42,6 +42,14 @@ class UserService {
         await UserRepository.updateUser(user);
         return { message: 'Hasło zostało zmienione pomyślnie.' };
     }
+
+    async getUserByEmail(email) {
+        return UserRepository.findByEmail(email);
+    }
+
+    async createUser(data) {
+        return UserRepository.createUser(data);
+    }
 }
 
 module.exports = new UserService();

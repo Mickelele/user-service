@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./config/db');
-const userRouter = require('./modules/users/user.routes');
+const courseRoutes = require('./modules/course/course.routes');
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/user', userRouter);
+app.use('/course', courseRoutes);
 
 const PORT = process.env.PORT || 3000;
 
