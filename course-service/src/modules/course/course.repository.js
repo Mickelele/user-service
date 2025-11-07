@@ -50,7 +50,7 @@ const CourseRepository = {
             let userData = null;
 
             try {
-                const response = await axios.get(`${USER_SERVICE_URL}/uzytkownicy/${nauczyciel.id_nauczyciela}`);
+                const response = await axios.get(`${USER_SERVICE_URL}/users/${nauczyciel.id_nauczyciela}`);
                 userData = response.data;
             } catch (err) {
                 console.warn(`Nie udało się pobrać danych użytkownika ${nauczyciel.id_nauczyciela}: ${err.message}`);
