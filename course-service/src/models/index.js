@@ -1,4 +1,13 @@
-const sequelize = require('../config/db');
-const Course = require('../modules/course/course.model');
+const { sequelize } = require('../config/db');
+const { Kurs, Grupa, Nauczyciel } = require('./associations');
 
-module.exports = { sequelize, Course };
+const initModels = async () => {
+    await sequelize.authenticate();
+    console.log('✅ Połączono z bazą danych');
+
+    await sequelize.sync({ alter: false });
+
+    console.log('✅ Modele i relacje zostały zarejestrowane');
+};
+
+module.exports = { sequelize, Kurs, Grupa, Nauczyciel, initModels };

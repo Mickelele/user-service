@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const { sequelize } = require('./config/db');
 const courseRoutes = require('./modules/course/course.routes');
+const groupRoutes = require('./modules/group/group.routes');
+const { initModels } = require('./models');
 
 const app = express();
 
@@ -15,7 +17,9 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use('/course', courseRoutes);
+app.use('/kursy', courseRoutes);
+app.use('/grupy', groupRoutes);
+
 
 const PORT = process.env.PORT || 3000;
 

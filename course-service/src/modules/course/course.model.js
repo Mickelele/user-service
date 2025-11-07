@@ -7,7 +7,8 @@ Kurs.init({
     id_kursu: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        allowNull: false,
+        autoIncrement: true,
     },
     nazwa_kursu: {
         type: DataTypes.STRING(100),

@@ -1,0 +1,37 @@
+const { DataTypes, Model } = require('sequelize');
+const { sequelize } = require('../../config/db');
+const Kurs = require('../course/course.model');
+const Nauczyciel = require('../teacher/teacher.model');
+
+class Grupa extends Model {}
+
+Grupa.init({
+    id_grupa: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    id_nauczyciela: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'id_nauczyciela'
+    },
+    Kurs_id_kursu: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'kurs_id_kursu'
+    },
+    liczba_uczniow: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+    }
+}, {
+    sequelize,
+    modelName: 'Grupa',
+    tableName: 'grupa',
+    timestamps: false
+});
+
+module.exports = Grupa;

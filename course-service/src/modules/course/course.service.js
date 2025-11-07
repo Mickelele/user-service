@@ -22,6 +22,12 @@ class CourseService {
     async delete(id) {
         return await CourseRepository.deleteCourse(id);
     }
+
+    //Zwraca wszystkie grupy zapisane na dany kurs
+    async findGroupsByCourseId(id) {
+        return await CourseRepository.findGroupsByCourseId(id);
+    }
+
 }
 
 module.exports = new CourseService();

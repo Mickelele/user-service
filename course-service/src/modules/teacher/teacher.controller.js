@@ -1,9 +1,9 @@
-const CourseService = require('./course.service');
+const GroupService = require('./teacher.service');
 
-const CourseController = {
+const TeacherController = {
     async getAll(req, res) {
         try {
-            const courses = await CourseService.getAll();
+            const courses = await GroupService.getAll();
             res.json(courses);
         } catch (err) {
             res.status(400).json({ error: err.message });
@@ -12,7 +12,7 @@ const CourseController = {
 
     async getOne(req, res) {
         try {
-            const course = await CourseService.getOne(req.params.id);
+            const course = await GroupService.getOne(req.params.id);
             res.json(course);
         } catch (err) {
             res.status(404).json({ error: err.message });
@@ -21,7 +21,7 @@ const CourseController = {
 
     async create(req, res) {
         try {
-            const newCourse = await CourseService.create(req.body);
+            const newCourse = await GroupService.create(req.body);
             res.status(201).json(newCourse);
         } catch (err) {
             res.status(400).json({ error: err.message });
@@ -30,7 +30,7 @@ const CourseController = {
 
     async update(req, res) {
         try {
-            const updated = await CourseService.update(req.params.id, req.body);
+            const updated = await GroupService.update(req.params.id, req.body);
             res.json(updated);
         } catch (err) {
             res.status(400).json({ error: err.message });
@@ -39,24 +39,12 @@ const CourseController = {
 
     async delete(req, res) {
         try {
-            await CourseService.delete(req.params.id);
-            res.json({ message: 'Usunięto kurs' });
-        } catch (err) {
-            res.status(400).json({ error: err.message });
-        }
-    },
-
-
-    async findGroupsByCourseId(req, res) {
-        try {
-            const groups = await CourseService.findGroupsByCourseId(req.params.id);
-            res.json(groups);
+            await GroupService.delete(req.params.id);
+            res.json({ message: 'Usunięto grupe' });
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
     }
-
-
 };
 
-module.exports = CourseController;
+module.exports = TeacherController;
