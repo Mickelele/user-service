@@ -12,6 +12,7 @@ router.post('/uploadImage', authMiddleware, upload.single('file'), uploadUserIma
 router.get('/me', authMiddleware, UserController.getProfile);
 router.put('/updateProfile', authMiddleware, UserController.updateProfile);
 router.put('/profile/password', authMiddleware, UserController.changePassword);
+router.get('/:id', authMiddleware, UserController.getUserById);
 
 
 router.get('/email/:email', UserController.getUserByEmail);

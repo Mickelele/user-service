@@ -47,6 +47,14 @@ class UserService {
         return UserRepository.findByEmail(email);
     }
 
+
+    async getUserById(id) {
+        const user = await UserRepository.findById(id);
+        if (!user) throw new Error(`Nie znaleziono użytkownika o numerze ${id}`);
+        return user;
+    }
+
+
     async createUser(data) {
         return UserRepository.createUser(data);
     }

@@ -57,6 +57,32 @@ const UserController = {
     },
 
 
+    async getUserById(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await UserService.getUserById(id);
+            if (!user) return res.status(404).json({ error: 'Użytkownik nie znaleziony' });
+
+            let zdjecie = null;
+            if (user.zdjecie) {
+                zdjecie = {
+                    nazwa: user.zdjecie.nazwa,
+                    dane: user.zdjecie.zawartosc
+                        ? user.zdjecie.zawartosc.toString('base64')
+                        : null
+                };
+            }
+
+            const { haslo, ...userData } = user.toJSON();
+            res.json({ ...userData, zdjecie });
+        } catch (err) {
+            console.error('Błąd przy pobieraniu użytkownika po ID:', err);
+            res.status(500).json({ error: err.message });
+        }
+    },
+
+
+
     async createUser(req, res) {
         try {
             const { imie, nazwisko, email, haslo, rola } = req.body;
