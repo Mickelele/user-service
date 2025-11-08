@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const GroupController = require('./teacher.controller');
+const TeacherController = require('./teacher.controller');
 const authMiddleware = require('../middleware/authMiddleware')
 
-router.get('/', GroupController.getAll);
-router.get('/:id', GroupController.getOne);
-router.post('/dodajGrupe', GroupController.create);
-router.put('/aktualizujGrupe/:id', GroupController.update);
-router.delete('/usunGrupe/:id', GroupController.delete);
+router.get('/', TeacherController.getAll);
+router.get('/:id', TeacherController.getOne);
+router.post('/dodajGrupe', TeacherController.create);
+router.put('/aktualizujGrupe/:id', TeacherController.update);
+router.delete('/usunGrupe/:id', TeacherController.delete);
 
 module.exports = router;

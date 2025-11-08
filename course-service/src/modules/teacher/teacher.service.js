@@ -1,26 +1,26 @@
-const GroupRepository = require('./teacher.repository');
+const TeacherRepository = require('./teacher.repository');
 
 class TeacherService {
     async getAll() {
-        return await GroupRepository.findAll();
+        return await TeacherRepository.findAll();
     }
 
     async getOne(id) {
-        const course = await GroupRepository.findById(id);
+        const course = await TeacherRepository.findById(id);
         if (!course) throw new Error('Grupa nie znaleziona');
         return course;
     }
 
     async create(data) {
-        return await GroupRepository.createCourse(data);
+        return await TeacherRepository.createCourse(data);
     }
 
     async update(id, data) {
-        return await GroupRepository.updateCourse(id, data);
+        return await TeacherRepository.updateCourse(id, data);
     }
 
     async delete(id) {
-        return await GroupRepository.deleteCourse(id);
+        return await TeacherRepository.deleteCourse(id);
     }
 }
 

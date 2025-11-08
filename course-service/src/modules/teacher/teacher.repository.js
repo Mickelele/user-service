@@ -1,28 +1,28 @@
-const Grupa = require('./teacher.model');
+const Nauczyciel = require('./teacher.model');
 
 const TeacherRepository = {
     async findAll() {
-        return Grupa.findAll();
+        return Nauczyciel.findAll();
     },
 
     async findById(id) {
-        return Grupa.findByPk(id);
+        return Nauczyciel.findByPk(id);
     },
 
-    async createCourse(data) {
-        return Grupa.create(data);
+    async createNauczyciel(data) {
+        return Nauczyciel.create(data);
     },
 
-    async updateCourse(id, data) {
+    async updateNauczyciel(id, data) {
         const course = await Kurs.findByPk(id);
         if (!course) throw new Error('Grupa nie znaleziony');
-        return Grupa.update(data);
+        return Nauczyciel.update(data);
     },
 
-    async deleteCourse(id) {
+    async deleteNauczyciel(id) {
         const course = await Kurs.findByPk(id);
         if (!course) throw new Error('Grupa nie znaleziony');
-        return Grupa.destroy();
+        return Nauczyciel.destroy();
     }
 };
 
