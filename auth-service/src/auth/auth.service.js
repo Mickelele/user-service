@@ -19,7 +19,7 @@ class AuthService {
             nazwisko,
             email,
             haslo: hashed,
-            rola: 'opiekun'
+            rola: 'gosc'
         });
 
         return { id: user.id_uzytkownika, email: user.email };
