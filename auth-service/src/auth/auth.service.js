@@ -4,7 +4,6 @@ const AuthRepository = require('./auth.repository');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 const TOKEN_EXP = '2h';
-console.log('AUTH SECRET:', `"${process.env.JWT_SECRET}"`, process.env.JWT_SECRET.length);
 
 
 class AuthService {
@@ -26,11 +25,10 @@ class AuthService {
     }
 
     async login({ email, haslo }) {
-        console.log("LOGIN:", email, haslo);
         const user = await AuthRepository.findByEmail(email);
         if (!user) throw new Error('Nieprawidłowe dane email');
 
-        const ok = await bcrypt.compare(haslo, user.haslo);
+        const ok = await bcrypt.compare(haslo, user.haslo)
         if (!ok) throw new Error('Nieprawidłowe dane');
 
         const token = jwt.sign({

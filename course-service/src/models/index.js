@@ -11,3 +11,4 @@ const initModels = async () => {
 };
 
 module.exports = { sequelize, Kurs, Grupa, Nauczyciel, initModels };
+//test
