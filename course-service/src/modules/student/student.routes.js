@@ -13,7 +13,7 @@ router.put('/:id', UczenController.update);
 
 router.delete('/:id', UczenController.delete);
 
-router.post('/zapiszNaGrupe', authMiddleware, UczenController.zapiszNaGrupe);
+//router.post('/zapiszNaGrupe', authMiddleware, UczenController.zapiszNaGrupe);
 
 
 
