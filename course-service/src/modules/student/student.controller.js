@@ -47,14 +47,33 @@ const UczenController = {
     },
 
 
-    async assignToGroup(req, res) {
+    async zapiszNaGrupe(req, res) {
         try {
-            const result = await UczenService.assignToGroup(req.body);
-            res.json(result);
+            const opiekunId = req.user.id;
+            const { imie, nazwisko, email, haslo, pseudonim, id_grupa } = req.body;
+
+            if (!imie || !nazwisko || !email || !haslo || !pseudonim || !id_grupa) {
+                return res.status(400).json({ error: 'Brak wymaganych danych' });
+            }
+
+            const uczen = await UczenService.createStudentWithUser({
+                imie,
+                nazwisko,
+                email,
+                haslo,
+                pseudonim,
+                id_grupa,
+                opiekunId
+            });
+
+            res.status(201).json(uczen);
         } catch (err) {
+            console.error(err);
             res.status(400).json({ error: err.message });
         }
     }
+
+
 
 
 };

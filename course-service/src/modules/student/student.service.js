@@ -1,4 +1,5 @@
 const axios = require('axios');
+const bcrypt = require('bcrypt');
 const UczenRepository = require('./student.repository');
 
 class UczenService {
@@ -48,11 +49,36 @@ class UczenService {
     }
 
 
-    async assignToGroup(data) {
-        const { id_ucznia, id_grupa } = data;
-        if (!id_ucznia || !id_grupa) throw new Error('Brak wymaganych danych');
-        return await UczenRepository.assignToGroup(id_ucznia, id_grupa);
+    async createStudentWithUser({ imie, nazwisko, email, haslo, pseudonim, id_grupa, opiekunId }) {
+        const hashed = await bcrypt.hash(haslo, 10);
+
+        let newUser;
+        try {
+            const res = await axios.post(`${this.userServiceUrl}/auth/register`, {
+                imie,
+                nazwisko,
+                email,
+                haslo: hashed,
+                rola: 'uczen'
+            });
+            newUser = res.data;
+        } catch (err) {
+            throw new Error(err.response?.data?.error || 'Błąd przy tworzeniu użytkownika');
+        }
+
+        const newStudent = await UczenRepository.create({
+            id_ucznia: newUser.id_uzytkownika, // id z user-service
+            id_grupa,
+            Opiekun_id_opiekuna: opiekunId,
+            saldo_punktow: 0,
+            pseudonim
+        });
+
+        return newStudent;
     }
+
+
+
 }
 
 module.exports = new UczenService();
