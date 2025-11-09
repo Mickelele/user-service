@@ -7,11 +7,7 @@ Nauczyciel.init({
     id_nauczyciela: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-        references: {
-            model: 'uzytkownik',
-            key: 'id_uzytkownika'
-        }
+        allowNull: false
     },
     numer_nauczyciela: {
         type: DataTypes.INTEGER,

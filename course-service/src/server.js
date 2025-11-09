@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use('/kursy', courseRoutes);
 app.use('/grupy', groupRoutes);
-app.use('/grupy', teacherRoutes);
+app.use('/nauczyciele', teacherRoutes);
 
 
 const PORT = process.env.PORT || 3000;

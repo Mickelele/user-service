@@ -2,27 +2,28 @@ const Nauczyciel = require('./teacher.model');
 
 const TeacherRepository = {
     async findAll() {
-        return Nauczyciel.findAll();
+        return await Nauczyciel.findAll();
     },
 
     async findById(id) {
-        return Nauczyciel.findByPk(id);
+        return await Nauczyciel.findByPk(id);
     },
 
-    async createNauczyciel(data) {
-        return Nauczyciel.create(data);
+    async create(data) {
+        return await Nauczyciel.create(data);
     },
 
-    async updateNauczyciel(id, data) {
-        const course = await Kurs.findByPk(id);
-        if (!course) throw new Error('Grupa nie znaleziony');
-        return Nauczyciel.update(data);
+    async update(id, data) {
+        const nauczyciel = await Nauczyciel.findByPk(id);
+        if (!nauczyciel) throw new Error('Nauczyciel nie znaleziony');
+        return await nauczyciel.update(data);
     },
 
-    async deleteNauczyciel(id) {
-        const course = await Kurs.findByPk(id);
-        if (!course) throw new Error('Grupa nie znaleziony');
-        return Nauczyciel.destroy();
+    async delete(id) {
+        const nauczyciel = await Nauczyciel.findByPk(id);
+        if (!nauczyciel) throw new Error('Nauczyciel nie znaleziony');
+        await nauczyciel.destroy();
+        return { message: 'Usunięto nauczyciela' };
     }
 };
 

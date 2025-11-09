@@ -3,8 +3,8 @@ const TeacherService = require('./teacher.service');
 const TeacherController = {
     async getAll(req, res) {
         try {
-            const courses = await TeacherService.getAll();
-            res.json(courses);
+            const nauczyciele = await TeacherService.getAll();
+            res.json(nauczyciele);
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
@@ -12,8 +12,8 @@ const TeacherController = {
 
     async getOne(req, res) {
         try {
-            const course = await TeacherService.getOne(req.params.id);
-            res.json(course);
+            const nauczyciel = await TeacherService.getOne(req.params.id);
+            res.json(nauczyciel);
         } catch (err) {
             res.status(404).json({ error: err.message });
         }
@@ -21,8 +21,8 @@ const TeacherController = {
 
     async create(req, res) {
         try {
-            const newCourse = await TeacherService.create(req.body);
-            res.status(201).json(newCourse);
+            const nowy = await TeacherService.create(req.body);
+            res.status(201).json(nowy);
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
@@ -39,8 +39,8 @@ const TeacherController = {
 
     async delete(req, res) {
         try {
-            await TeacherService.delete(req.params.id);
-            res.json({ message: 'Usunięto grupe' });
+            const result = await TeacherService.delete(req.params.id);
+            res.json(result);
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
