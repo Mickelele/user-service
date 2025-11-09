@@ -5,8 +5,13 @@ const authMiddleware = require('../middleware/authMiddleware')
 
 router.get('/', GroupController.getAll);
 router.get('/:id', GroupController.getOne);
+router.get('/:id/uczniowie', GroupController.getStudents);
+
 router.post('/dodajGrupe', GroupController.create);
+
 router.put('/aktualizujGrupe/:id', GroupController.update);
+
 router.delete('/usunGrupe/:id', GroupController.delete);
+
 
 module.exports = router;

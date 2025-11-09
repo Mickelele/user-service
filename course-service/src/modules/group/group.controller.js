@@ -44,6 +44,15 @@ const GroupController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async getStudents(req, res) {
+        try {
+            const uczniowie = await GroupService.getStudents(req.params.id);
+            res.json(uczniowie);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
 };
 

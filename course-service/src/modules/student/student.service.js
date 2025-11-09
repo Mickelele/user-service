@@ -46,6 +46,13 @@ class UczenService {
     async delete(id) {
         return await UczenRepository.delete(id);
     }
+
+
+    async assignToGroup(data) {
+        const { id_ucznia, id_grupa } = data;
+        if (!id_ucznia || !id_grupa) throw new Error('Brak wymaganych danych');
+        return await UczenRepository.assignToGroup(id_ucznia, id_grupa);
+    }
 }
 
 module.exports = new UczenService();

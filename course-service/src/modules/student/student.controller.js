@@ -44,7 +44,19 @@ const UczenController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+
+    async assignToGroup(req, res) {
+        try {
+            const result = await UczenService.assignToGroup(req.body);
+            res.json(result);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
+
+
 };
 
 module.exports = UczenController;

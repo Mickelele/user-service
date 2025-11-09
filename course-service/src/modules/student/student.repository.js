@@ -24,7 +24,19 @@ const UczenRepository = {
         if (!uczen) throw new Error('Uczeń nie znaleziony');
         await uczen.destroy();
         return { message: 'Usunięto ucznia' };
+    },
+
+
+    async assignToGroup(id_ucznia, id_grupa) {
+        const uczen = await Uczen.findByPk(id_ucznia);
+        if (!uczen) throw new Error('Uczeń nie znaleziony');
+        uczen.id_grupa = id_grupa;
+        await uczen.save();
+        return uczen;
     }
+
+
+
 };
 
 module.exports = UczenRepository;

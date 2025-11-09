@@ -1,4 +1,5 @@
 const Grupa = require('./group.model');
+const Uczen = require('../student/student.model');
 
 const GroupRepository = {
     async findAll() {
@@ -23,6 +24,14 @@ const GroupRepository = {
         const course = await Grupa.findByPk(id);
         if (!course) throw new Error('Grupa nie znaleziony');
         return Grupa.destroy();
+    },
+
+    async getStudents(id_grupa) {
+        const grupa = await Grupa.findByPk(id_grupa, {
+            include: [{ model: Uczen, as: 'uczniowie' }]
+        });
+        if (!grupa) throw new Error('Grupa nie znaleziona');
+        return grupa.uczniowie;
     }
 };
 

@@ -24,6 +24,11 @@ class GroupService {
     }
 
 
+    async getStudents(id) {
+        return await GroupRepository.getStudents(id);
+    }
+
+
 }
 
 module.exports = new GroupService();

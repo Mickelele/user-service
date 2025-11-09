@@ -15,7 +15,8 @@ Uczen.init({
     },
     Opiekun_id_opiekuna: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        field: 'opiekun_id_opiekuna'
     },
     saldo_punktow: {
         type: DataTypes.INTEGER,
