@@ -11,13 +11,11 @@ class AuthService {
         const existing = await AuthRepository.findByEmail(email).catch(() => null);
         if (existing) throw new Error('Email zajęty');
 
-        const hashed = await bcrypt.hash(haslo, 10);
-
         const user = await AuthRepository.createUser({
             imie,
             nazwisko,
             email,
-            haslo: hashed,
+            haslo: haslo,
             rola: 'opiekun'
         });
 
@@ -32,6 +30,9 @@ class AuthService {
 
         const ok = await bcrypt.compare(haslo, user.haslo)
         console.log("okkkkk " + ok)
+        console.log("haslo " + haslo)
+        console.log("haslodb " + user.haslo)
+        console.log(user)
         if (!ok) throw new Error('Nieprawidłowe dane');
 
         const token = jwt.sign({
