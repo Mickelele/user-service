@@ -28,7 +28,7 @@ class AuthService {
     async login({ email, haslo }) {
         console.log("LOGIN:", email, haslo);
         const user = await AuthRepository.findByEmail(email);
-        if (!user) throw new Error('Nieprawidłowe dane');
+        if (!user) throw new Error('Nieprawidłowe dane email');
 
         const ok = await bcrypt.compare(haslo, user.haslo);
         if (!ok) throw new Error('Nieprawidłowe dane');
