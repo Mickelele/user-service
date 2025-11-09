@@ -28,7 +28,10 @@ class AuthService {
         const user = await AuthRepository.findByEmail(email);
         if (!user) throw new Error('Nieprawidłowe dane email');
 
+
+
         const ok = await bcrypt.compare(haslo, user.haslo)
+        console.log("okkkkk " + ok)
         if (!ok) throw new Error('Nieprawidłowe dane');
 
         const token = jwt.sign({
