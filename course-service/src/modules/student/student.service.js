@@ -51,7 +51,6 @@ class UczenService {
 
 
     async createStudentWithUser({ imie, nazwisko, email, haslo, pseudonim, id_grupa, opiekunId }) {
-        console.log("====================")
         let newUser;
         try {
             const res = await axios.post(`${this.userServiceUrl}/user`, {
@@ -69,7 +68,7 @@ class UczenService {
 
 
         const newStudent = await UczenRepository.create({
-            id_ucznia: newUser.id,
+            id_ucznia: newUser.id_uzytkownika,
             id_grupa,
             Opiekun_id_opiekuna: opiekunId,
             saldo_punktow: 0,
