@@ -57,13 +57,15 @@ class UczenService {
                 imie,
                 nazwisko,
                 email,
-                haslo: haslo,
+                haslo,
                 rola: 'uczen'
             });
             newUser = res.data;
         } catch (err) {
+            console.error('Błąd z user-service:', err.response?.status, err.response?.data);
             throw new Error(err.response?.data?.error || 'Błąd przy tworzeniu użytkownika');
         }
+
 
         const newStudent = await UczenRepository.create({
             id_ucznia: newUser.id_uzytkownika,
