@@ -50,7 +50,6 @@ class UczenService {
 
 
     async createStudentWithUser({ imie, nazwisko, email, haslo, pseudonim, id_grupa, opiekunId }) {
-        const hashed = await bcrypt.hash(haslo, 10);
 
         let newUser;
         try {
@@ -58,7 +57,7 @@ class UczenService {
                 imie,
                 nazwisko,
                 email,
-                haslo: hashed,
+                haslo: haslo,
                 rola: 'uczen'
             });
             newUser = res.data;
@@ -67,7 +66,7 @@ class UczenService {
         }
 
         const newStudent = await UczenRepository.create({
-            id_ucznia: newUser.id_uzytkownika, // id z user-service
+            id_ucznia: newUser.id_uzytkownika,
             id_grupa,
             Opiekun_id_opiekuna: opiekunId,
             saldo_punktow: 0,
