@@ -14,7 +14,7 @@ User.init({
     email: { type: DataTypes.STRING, allowNull: false, unique: true },
     haslo: { type: DataTypes.STRING, allowNull: false },
     rola: {
-        type: DataTypes.ENUM('uczeń', 'opiekun', 'nauczyciel', 'administrator', 'gość'),
+        type: DataTypes.ENUM('uczen', 'opiekun', 'nauczyciel', 'administrator', 'gosc'),
         allowNull: false,
     }
 }, {
