@@ -62,7 +62,7 @@ class UczenService {
         console.log("====================")
         let newUser;
         try {
-            const res = await axios.post(`${this.authServiceUrl}/auth/register`, {
+            const res = await axios.post(`${this.userServiceUrl}/user`, {
                 imie,
                 nazwisko,
                 email,

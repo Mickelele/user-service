@@ -7,7 +7,7 @@ const TOKEN_EXP = '2h';
 
 
 class AuthService {
-    async register({ imie, nazwisko, email, haslo }) {
+    async register({ imie, nazwisko, email, haslo, register }) {
         const existing = await AuthRepository.findByEmail(email).catch(() => null);
         if (existing) throw new Error('Email zajęty');
 
