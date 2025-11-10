@@ -5,6 +5,7 @@ const UczenRepository = require('./student.repository');
 class UczenService {
     constructor() {
         this.userServiceUrl = process.env.USER_SERVICE_URL;
+        this.authServiceUrl = process.env.AUTO_SERIVCE_URL;
     }
 
     async getAll() {
@@ -13,7 +14,7 @@ class UczenService {
         const uczniowieZUserami = await Promise.all(
             uczniowie.map(async (u) => {
                 try {
-                    const res = await axios.get(`${this.userServiceUrl}/api/users/${u.id_ucznia}`);
+                    const res = await axios.get(`${this.userServiceUrl}/uzytkownicy/${u.id_ucznia}`);
                     return { ...u.toJSON(), user: res.data };
                 } catch {
                     return { ...u.toJSON(), user: null };
@@ -29,7 +30,7 @@ class UczenService {
         if (!uczen) throw new Error('Uczeń nie znaleziony');
 
         try {
-            const res = await axios.get(`${this.userServiceUrl}/api/users/${uczen.id_ucznia}`);
+            const res = await axios.get(`${this.userServiceUrl}/uzytkownicy/${uczen.id_ucznia}`);
             return { ...uczen.toJSON(), user: res.data };
         } catch {
             return { ...uczen.toJSON(), user: null };
@@ -50,10 +51,18 @@ class UczenService {
 
 
     async createStudentWithUser({ imie, nazwisko, email, haslo, pseudonim, id_grupa, opiekunId }) {
-
+        console.log("====================")
+        console.log(imie)
+        console.log(nazwisko)
+        console.log(email)
+        console.log(haslo)
+        console.log(pseudonim)
+        console.log(id_grupa)
+        console.log(opiekunId)
+        console.log("====================")
         let newUser;
         try {
-            const res = await axios.post(`${this.userServiceUrl}/auth/register`, {
+            const res = await axios.post(`${this.authServiceUrl}/auth/register`, {
                 imie,
                 nazwisko,
                 email,
@@ -68,7 +77,7 @@ class UczenService {
 
 
         const newStudent = await UczenRepository.create({
-            id_ucznia: newUser.id_uzytkownika,
+            id_ucznia: newUser.id,
             id_grupa,
             Opiekun_id_opiekuna: opiekunId,
             saldo_punktow: 0,
