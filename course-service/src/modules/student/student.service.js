@@ -52,14 +52,6 @@ class UczenService {
 
     async createStudentWithUser({ imie, nazwisko, email, haslo, pseudonim, id_grupa, opiekunId }) {
         console.log("====================")
-        console.log(imie)
-        console.log(nazwisko)
-        console.log(email)
-        console.log(haslo)
-        console.log(pseudonim)
-        console.log(id_grupa)
-        console.log(opiekunId)
-        console.log("====================")
         let newUser;
         try {
             const res = await axios.post(`${this.userServiceUrl}/user`, {

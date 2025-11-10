@@ -23,7 +23,7 @@ User.init({
     tableName: 'uzytkownik',
     timestamps: false
 });
-
+//aa
 const Zdjecie = require('../zdjecie/zdjecie.model');
 
 User.belongsTo(Zdjecie, { foreignKey: 'id_zdjecia', as: 'zdjecie' });
