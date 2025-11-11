@@ -7,7 +7,7 @@ const initModels = async () => {
 
     await sequelize.sync({ alter: false });
 
-    console.log('✅ Modele i relacje zostały zarejestrowane');
+    console.log('✅ Modele i relacje zostały zarejestrowanee');
 };
 
 module.exports = { sequelize, Kurs, Grupa, initModels };
