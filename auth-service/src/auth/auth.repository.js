@@ -12,8 +12,8 @@ const AuthRepository = {
         const userRes = await axios.post(`${USER_SERVICE_URL}/user`, data);
 
         const opiekunData = {
-            id_opiekuna: userRes.data.id,
-            nr_indy_konta_bankowego: data.nr_indy_konta_bankowego || 'BRAK'
+            id_opiekuna: userRes.data.id_uzytkownika,
+            nr_indy_konta_bankowego: null
         };
 
         await axios.post(`${USER_SERVICE_URL}/opiekunowie`, opiekunData);
