@@ -1,11 +1,14 @@
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const UczenRepository = require('./student.repository');
+const UserService = require('../users/user.service');
+
 
 class UczenService {
     constructor() {
         this.userServiceUrl = process.env.USER_SERVICE_URL;
         this.authServiceUrl = process.env.AUTO_SERIVCE_URL;
+        this.courseServiceUrl = process.env.COURSE_SERVICE_URL;
     }
 
     async getAll() {
@@ -50,20 +53,21 @@ class UczenService {
     }
 
 
+
     async createStudentWithUser({ imie, nazwisko, email, haslo, pseudonim, id_grupa, opiekunId }) {
         let newUser;
+
         try {
-            const res = await axios.post(`${this.userServiceUrl}/user`, {
+            newUser = await UserService.createUser({
                 imie,
                 nazwisko,
                 email,
                 haslo,
                 rola: 'uczen'
             });
-            newUser = res.data;
         } catch (err) {
-            console.error('Błąd z user-service:', err.response?.status, err.response?.data);
-            throw new Error(err.response?.data?.error || 'Błąd przy tworzeniu użytkownika');
+            console.error('Błąd z user-service:', err.message);
+            throw new Error('Błąd przy tworzeniu użytkownika');
         }
 
 
@@ -75,11 +79,23 @@ class UczenService {
             pseudonim
         });
 
-        const GroupService = require('../group/group.service');
-        await GroupService.adjustStudentCount(id_grupa, 1);
+
+        try {
+            await axios.post(`${this.courseServiceUrl}/groups/${id_grupa}/adjust-student-count`, {
+                delta: 1
+            });
+        } catch (err) {
+            console.error('Błąd w course-service:', err.response?.status, err.response?.data);
+
+        }
 
         return newStudent;
     }
+
+
+
+
+
 
 
 
