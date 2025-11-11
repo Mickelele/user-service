@@ -75,11 +75,8 @@ class UczenService {
             pseudonim
         });
 
-        try {
-            await axios.patch(`${process.env.COURSE_SERVICE_URL}/grupy/${id_grupa}/adjust`, { delta: 1 });
-        } catch (err) {
-            console.error('Błąd przy aktualizacji liczby uczniów w grupie:', err.response?.data || err.message);
-        }
+        const GroupService = require('../group/group.service');
+        await GroupService.adjustStudentCount(id_grupa, 1);
 
         return newStudent;
     }
