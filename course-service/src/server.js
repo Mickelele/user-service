@@ -4,7 +4,6 @@ const cors = require('cors');
 const { sequelize } = require('./config/db');
 const courseRoutes = require('./modules/course/course.routes');
 const groupRoutes = require('./modules/group/group.routes');
-const teacherRoutes = require('../../user-service/src/modules/teacher/teacher.routes');
 const studentRoutes = require('./modules/student/student.routes');
 const { initModels } = require('./models');
 
@@ -21,7 +20,6 @@ app.use(express.json());
 
 app.use('/kursy', courseRoutes);
 app.use('/grupy', groupRoutes);
-app.use('/nauczyciele', teacherRoutes);
 app.use('/uczniowie', studentRoutes);
 
 
