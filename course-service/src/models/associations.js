@@ -1,6 +1,6 @@
 const Kurs = require('../modules/course/course.model');
 const Grupa = require('../modules/group/group.model');
-const Nauczyciel = require('../modules/teacher/teacher.model');
+const Nauczyciel = require('../../../user-service/src/modules/teacher/teacher.model');
 const Uczen = require('../modules/student/student.model');
 
 // Kurs 1—* Grupa

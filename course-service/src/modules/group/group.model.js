@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
 const { sequelize } = require('../../config/db');
 const Kurs = require('../course/course.model');
-const Nauczyciel = require('../teacher/teacher.model');
+const Nauczyciel = require('../../../../user-service/src/modules/teacher/teacher.model');
 
 class Grupa extends Model {}
 
