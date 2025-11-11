@@ -1,6 +1,7 @@
 const Kurs = require('./course.model');
 const Grupa = require('../group/group.model');
 const Nauczyciel = require('../../../../user-service/src/modules/teacher/teacher.model');
+const User = require('../../../../user-service/src/modules/users/user.model');
 const axios = require('axios');
 
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:4000';
