@@ -40,7 +40,7 @@ const GroupRepository = {
         const grupa = await Grupa.findByPk(id_grupa);
         if (!grupa) throw new Error('Grupa nie znaleziona');
 
-        grupa.liczba_uczniow += delta;
+        grupa.liczba_uczniow += Number(delta);
 
         if (grupa.liczba_uczniow < 0) grupa.liczba_uczniow = 0;
 
