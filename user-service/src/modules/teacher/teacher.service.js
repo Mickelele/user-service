@@ -1,22 +1,14 @@
-const axios = require('axios');
 const TeacherRepository = require('./teacher.repository');
+const User = require('../users/user.model');
 
 class TeacherService {
-    constructor() {
-        this.userServiceUrl = process.env.USER_SERVICE_URL;
-    }
-
     async getAll() {
         const nauczyciele = await TeacherRepository.findAll();
 
         const nauczycieleZUserami = await Promise.all(
             nauczyciele.map(async (n) => {
-                try {
-                    const res = await axios.get(`${this.userServiceUrl}/user/${n.id_nauczyciela}`);
-                    return { ...n.toJSON(), user: res.data };
-                } catch {
-                    return { ...n.toJSON(), user: null };
-                }
+                const user = await User.findByPk(n.id_nauczyciela);
+                return { ...n.toJSON(), user: user ? user.toJSON() : null };
             })
         );
 
@@ -27,12 +19,8 @@ class TeacherService {
         const nauczyciel = await TeacherRepository.findById(id);
         if (!nauczyciel) throw new Error('Nauczyciel nie znaleziony');
 
-        try {
-            const res = await axios.get(`${this.userServiceUrl}/user/${nauczyciel.id_nauczyciela}`);
-            return { ...nauczyciel.toJSON(), user: res.data };
-        } catch {
-            return { ...nauczyciel.toJSON(), user: null };
-        }
+        const user = await User.findByPk(nauczyciel.id_nauczyciela);
+        return { ...nauczyciel.toJSON(), user: user ? user.toJSON() : null };
     }
 
     async create(data) {
