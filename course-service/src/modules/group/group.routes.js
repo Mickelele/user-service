@@ -13,5 +13,8 @@ router.put('/aktualizujGrupe/:id', GroupController.update);
 
 router.delete('/usunGrupe/:id', GroupController.delete);
 
+router.patch('/:id/adjust', GroupController.adjustStudentCount);
+
+
 
 module.exports = router;

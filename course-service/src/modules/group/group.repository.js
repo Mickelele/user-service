@@ -32,7 +32,25 @@ const GroupRepository = {
         });
         if (!grupa) throw new Error('Grupa nie znaleziona');
         return grupa.uczniowie;
+    },
+
+
+
+    async adjustStudentCount(id_grupa, delta) {
+        const grupa = await Grupa.findByPk(id_grupa);
+        if (!grupa) throw new Error('Grupa nie znaleziona');
+
+        grupa.liczba_uczniow += delta;
+
+        if (grupa.liczba_uczniow < 0) grupa.liczba_uczniow = 0;
+
+        await grupa.save();
+        return grupa;
     }
+
+
+
+
 };
 
 module.exports = GroupRepository;

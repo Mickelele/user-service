@@ -28,6 +28,11 @@ class GroupService {
         return await GroupRepository.getStudents(id);
     }
 
+    async adjustStudentCount(id, delta) {
+        return await GroupRepository.adjustStudentCount(id, delta);
+    }
+
+
 
 }
 

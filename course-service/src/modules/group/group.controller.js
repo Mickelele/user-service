@@ -53,7 +53,23 @@ const GroupController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+
+    async adjustStudentCount(req, res) {
+        try {
+            const delta = parseInt(req.body.delta);
+            if (isNaN(delta)) throw new Error('Delta musi być liczbą');
+
+            const updatedGroup = await GroupService.adjustStudentCount(req.params.id, delta);
+            res.json(updatedGroup);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
+
+
+
 };
 
 module.exports = GroupController;
