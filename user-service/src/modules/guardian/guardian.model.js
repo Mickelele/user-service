@@ -12,12 +12,12 @@ Opiekun.init({
     },
     nr_indy_konta_bankowego: {
         type: DataTypes.STRING(100),
-        allowNull: false
+        allowNull: true
     }
 }, {
     sequelize,
     modelName: 'Opiekun',
-    tableName: 'Opiekun',
+    tableName: 'opiekun',
     timestamps: false
 });
 

@@ -9,16 +9,17 @@ const AuthRepository = {
     },
 
     async createUser(data) {
-        const res = await axios.post(`${USER_SERVICE_URL}/user`, data);
+        const userRes = await axios.post(`${USER_SERVICE_URL}/user`, data);
 
         const opiekunData = {
             id_opiekuna: userRes.data.id,
-            nr_indy_konta_bankowego: null
+            nr_indy_konta_bankowego: data.nr_indy_konta_bankowego || 'BRAK'
         };
 
-        const res2 = await axios.post(`${USER_SERVICE_URL}/opiekunowie`, opiekunData);
-        return res.data;
-    }
+        await axios.post(`${USER_SERVICE_URL}/opiekunowie`, opiekunData);
+
+        return userRes.data;
+    },
 };
 
 module.exports = AuthRepository;
