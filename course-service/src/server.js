@@ -19,7 +19,6 @@ app.use(express.json());
 
 app.use('/kursy', courseRoutes);
 app.use('/grupy', groupRoutes);
-app.use('/uczniowie', studentRoutes);
 
 
 const PORT = process.env.PORT || 3000;
