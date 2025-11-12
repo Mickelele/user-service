@@ -1,5 +1,5 @@
 const Grupa = require('./group.model');
-const Uczen = require('../student/student.model');
+const Uczen = require('./student.model');
 
 const GroupRepository = {
     async findAll() {
