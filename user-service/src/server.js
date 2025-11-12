@@ -21,7 +21,7 @@ app.use(express.json());
 app.use('/user', userRouter);
 app.use('/nauczyciele', teacherRouter);
 app.use('/opiekunowie', guardianRouter);
-app.use('/uczniowie', guardianRouter);
+app.use('/uczniowie', studentRouter);
 
 const PORT = process.env.PORT || 3000;
 
