@@ -1,7 +1,7 @@
 const Kurs = require('../modules/course/course.model');
 const Grupa = require('../modules/group/group.model');
 const Nauczyciel = require('../modules/course/teacher.model');
-const Uczen = require('../modules/student/student.model');
+const Uczen = require('../modules/group/student.model');
 
 // Kurs 1—* Grupa
 Kurs.hasMany(Grupa, { foreignKey: 'Kurs_id_kursu', as: 'grupy' });
