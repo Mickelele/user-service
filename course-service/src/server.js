@@ -4,7 +4,6 @@ const cors = require('cors');
 const { sequelize } = require('./config/db');
 const courseRoutes = require('./modules/course/course.routes');
 const groupRoutes = require('./modules/group/group.routes');
-const studentRoutes = require('./modules/student/student.routes');
 const { initModels } = require('./models');
 
 const app = express();

@@ -5,6 +5,7 @@ const { sequelize } = require('./config/db');
 const userRouter = require('./modules/users/user.routes');
 const teacherRouter = require('./modules/teacher/teacher.routes');
 const guardianRouter = require('./modules/guardian/guardian.routes');
+const studentRouter = require('./modules/student/student.routes');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/user', userRouter);
 app.use('/nauczyciele', teacherRouter);
 app.use('/opiekunowie', guardianRouter);
+app.use('/uczniowie', guardianRouter);
 
 const PORT = process.env.PORT || 3000;
 
