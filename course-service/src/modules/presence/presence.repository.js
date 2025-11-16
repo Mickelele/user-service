@@ -1,4 +1,5 @@
 const Obecnosc = require('./presence.model');
+const Zajecia = require('../lesson/lesson.model');
 
 const PresenceRepository = {
 
@@ -28,7 +29,24 @@ const PresenceRepository = {
 
         await presence.destroy();
         return;
+    },
+
+
+
+
+    async findForUser(id_ucznia) {
+        return Obecnosc.findAll({
+            where: { id_ucznia },
+            include: [
+                {
+                    model: Zajecia,
+                    as: 'zajecia',
+                    attributes: ['id_zajec', 'tematZajec', 'data']
+                }
+            ]
+        });
     }
+
 };
 
 module.exports = PresenceRepository;

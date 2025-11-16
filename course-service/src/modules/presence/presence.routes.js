@@ -16,4 +16,7 @@ router.put('/obecnosci/:id', PresenceController.update);
 
 router.delete('/obecnosci/:id', PresenceController.delete);
 
+router.get('/obecnosciUcznia/:userId', PresenceController.getForUser);
+
+
 module.exports = router;

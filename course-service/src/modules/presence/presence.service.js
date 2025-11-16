@@ -23,6 +23,11 @@ class PresenceService {
     async delete(id) {
         return PresenceRepository.delete(id);
     }
+
+    async getForUser(id_ucznia) {
+        return PresenceRepository.findForUser(id_ucznia);
+    }
+
 }
 
 module.exports = new PresenceService();

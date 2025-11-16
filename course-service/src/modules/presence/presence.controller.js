@@ -45,7 +45,18 @@ const PresenceController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+
+    async getForUser(req, res) {
+        try {
+            const entries = await PresenceService.getForUser(req.params.userId);
+            res.json(entries);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
+
 };
 
 module.exports = PresenceController;
