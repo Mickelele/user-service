@@ -25,7 +25,16 @@ const OpiekunRepository = {
         if (!opiekun) throw new Error('Opiekun nie znaleziony');
         await opiekun.destroy();
         return { message: 'Usunięto opiekuna' };
+    },
+
+    async findStudents(id_opiekuna) {
+        return await require('../student/student.model').findAll({
+            where: { Opiekun_id_opiekuna: id_opiekuna }
+        });
     }
+
+
+
 };
 
 module.exports = OpiekunRepository;

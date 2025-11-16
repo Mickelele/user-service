@@ -23,6 +23,10 @@ class OpiekunService {
     async delete(id) {
         return await OpiekunRepository.delete(id);
     }
+
+    async getStudents(id) {
+        return await OpiekunRepository.findStudents(id);
+    }
 }
 
 module.exports = new OpiekunService();

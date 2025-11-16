@@ -50,6 +50,11 @@ User.hasOne(Opiekun, {
     as: 'opiekun'
 });
 
+
+Opiekun.hasMany(Uczen, { foreignKey: 'Opiekun_id_opiekuna', as: 'uczniowie' });
+Uczen.belongsTo(Opiekun, { foreignKey: 'Opiekun_id_opiekuna', as: 'opiekun' });
+
+
 module.exports = {
     User,
     Zdjecie,
