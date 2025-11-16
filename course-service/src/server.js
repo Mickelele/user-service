@@ -5,6 +5,7 @@ const { sequelize } = require('./config/db');
 const courseRoutes = require('./modules/course/course.routes');
 const groupRoutes = require('./modules/group/group.routes');
 const lessonRoutes = require('./modules/lesson/lesson.routes');
+const presenceRoutes = require('./modules/presence/presence.routes');
 const { initModels } = require('./models');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/kursy', courseRoutes);
 app.use('/grupy', groupRoutes);
 app.use('/zajecia', lessonRoutes);
+app.use('/obecnosc', presenceRoutes);
 
 
 const PORT = process.env.PORT || 3000;

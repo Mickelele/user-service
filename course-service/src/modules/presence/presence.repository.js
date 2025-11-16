@@ -1,0 +1,34 @@
+const Obecnosc = require('./presence.model');
+
+const PresenceRepository = {
+
+    async findAllForLesson(id_zajec) {
+        return Obecnosc.findAll({ where: { id_zajec } });
+    },
+
+    async findOne(id) {
+        return Obecnosc.findByPk(id);
+    },
+
+    async create(data) {
+        return Obecnosc.create(data);
+    },
+
+    async update(id, data) {
+        const presence = await Obecnosc.findByPk(id);
+        if (!presence) throw new Error("Obecność nie znaleziona");
+
+        await presence.update(data);
+        return presence;
+    },
+
+    async delete(id) {
+        const presence = await Obecnosc.findByPk(id);
+        if (!presence) throw new Error("Obecność nie znaleziona");
+
+        await presence.destroy();
+        return;
+    }
+};
+
+module.exports = PresenceRepository;
