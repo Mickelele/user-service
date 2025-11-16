@@ -26,6 +26,11 @@ Grupa.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
+    },
+    dzien_tygodnia: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        defaultValue: 'Poniedziałek'
     }
 }, {
     sequelize,
