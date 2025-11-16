@@ -24,8 +24,22 @@ class OpiekunService {
         return await OpiekunRepository.delete(id);
     }
 
-    async getStudents(id) {
-        return await OpiekunRepository.findStudents(id);
+    async getStudentsWithUserInfo(id) {
+        const uczniowie = await OpiekunRepository.findStudentsWithUserInfo(id);
+
+        return uczniowie.map(uczen => ({
+            id_ucznia: uczen.id_ucznia,
+            id_grupa: uczen.id_grupa,
+            Opiekun_id_opiekuna: uczen.Opiekun_id_opiekuna,
+            saldo_punktow: uczen.saldo_punktow,
+            pseudonim: uczen.pseudonim,
+            user: uczen.user ? {
+                id_uzytkownika: uczen.user.id_uzytkownika,
+                imie: uczen.user.imie,
+                nazwisko: uczen.user.nazwisko,
+                email: uczen.user.email
+            } : null
+        }));
     }
 }
 

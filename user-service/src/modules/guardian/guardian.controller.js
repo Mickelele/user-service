@@ -47,9 +47,9 @@ const OpiekunController = {
         }
     },
 
-    async getStudents(req, res) {
+    async getStudentsWithUserInfo(req, res) {
         try {
-            const uczniowie = await OpiekunService.getStudents(req.params.id);
+            const uczniowie = await OpiekunService.getStudentsWithUserInfo(req.params.id);
             res.json(uczniowie);
         } catch (err) {
             res.status(400).json({ error: err.message });

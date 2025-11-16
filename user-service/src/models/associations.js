@@ -1,3 +1,4 @@
+// W pliku z relacjami - usuń konfliktujące definicje
 const User = require('../modules/users/user.model');
 const Zdjecie = require('../modules/zdjecie/zdjecie.model');
 const Nauczyciel = require('../modules/teacher/teacher.model');
@@ -21,9 +22,10 @@ User.hasOne(Nauczyciel, {
 });
 
 // ==== RELACJE DLA UCZNIÓW ====
+// TYLKO JEDNA relacja Uczen -> User
 Uczen.belongsTo(User, {
     foreignKey: 'id_ucznia',
-    as: 'user'
+    as: 'userDetails' // Zmieniamy alias na unikalny
 });
 User.hasOne(Uczen, {
     foreignKey: 'id_ucznia',
@@ -37,23 +39,18 @@ Uczen.belongsTo(Opiekun, {
 });
 Opiekun.hasMany(Uczen, {
     foreignKey: 'Opiekun_id_opiekuna',
-    as: 'dzieci'
+    as: 'uczniowie' // Używamy spójnego aliasu
 });
 
 // ==== RELACJE DLA OPIEKUNÓW ====
 Opiekun.belongsTo(User, {
     foreignKey: 'id_opiekuna',
-    as: 'user'
+    as: 'userDetails' // Ten sam alias co dla uczniów
 });
 User.hasOne(Opiekun, {
     foreignKey: 'id_opiekuna',
     as: 'opiekun'
 });
-
-
-Opiekun.hasMany(Uczen, { foreignKey: 'Opiekun_id_opiekuna', as: 'uczniowie' });
-Uczen.belongsTo(Opiekun, { foreignKey: 'Opiekun_id_opiekuna', as: 'opiekun' });
-
 
 module.exports = {
     User,

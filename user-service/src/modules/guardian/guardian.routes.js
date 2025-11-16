@@ -7,7 +7,7 @@ router.get('/:id', OpiekunController.getOne);
 router.post('/', OpiekunController.create);
 router.put('/:id', OpiekunController.update);
 router.delete('/:id', OpiekunController.delete);
-router.get('/:id/uczniowie', OpiekunController.getStudents);
+router.get('/:id/uczniowie', OpiekunController.getStudentsWithUserInfo);
 
 
 module.exports = router;
