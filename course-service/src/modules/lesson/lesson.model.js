@@ -27,6 +27,10 @@ Zajecia.init({
         type: DataTypes.DATEONLY,
         allowNull: false
     },
+    godzina: {
+        type: DataTypes.TIME,
+        allowNull: false
+    },
     notatki_od_nauczyciela: {
         type: DataTypes.STRING(500),
         allowNull: true
