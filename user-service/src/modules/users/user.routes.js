@@ -7,6 +7,7 @@ const authMiddleware = require('./middleware/authMiddleware')
 
 const upload = multer({ storage: multer.memoryStorage() });
 
+router.get('/test/test', UserController.test);
 
 router.post('/uploadImage', authMiddleware, upload.single('file'), uploadUserImage);
 router.get('/me', authMiddleware, UserController.getProfile);

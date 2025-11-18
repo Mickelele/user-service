@@ -28,7 +28,22 @@ const AuthController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+    async test(req, res) {
+        try {
+            return res.status(200).json({
+                message: "Operacja zakończona sukcesem",
+                status: "OK"
+            });
+        } catch (error) {
+            return res.status(500).json({
+                message: "Wystąpił błąd serwera",
+                error: error.message
+            });
+        }
     }
+
+
 };
 
 module.exports = AuthController;
