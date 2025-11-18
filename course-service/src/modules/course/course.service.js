@@ -27,9 +27,9 @@ class CourseService {
         return await CourseRepository.findGroupsByCourseId(id);
     }
 
-    async getCoursesByTeacher(teacherId) {
+    async getCoursesByTeacher(teacherId, dzienTygodnia = null) {
         if (!teacherId) throw new Error('Brak identyfikatora nauczyciela');
-        return await CourseRepository.findCoursesByTeacherId(teacherId);
+        return await CourseRepository.findCoursesByTeacherId(teacherId, dzienTygodnia);
     }
 
 }

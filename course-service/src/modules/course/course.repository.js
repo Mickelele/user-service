@@ -72,15 +72,21 @@ const CourseRepository = {
     },
 
 
-    async findCoursesByTeacherId(teacherId) {
+    async findCoursesByTeacherId(teacherId, dzienTygodnia = null) {
+        const groupWhere = {
+            id_nauczyciela: teacherId
+        };
+
+        if (dzienTygodnia) {
+            groupWhere.dzien_tygodnia = dzienTygodnia;
+        }
+
         return Kurs.findAll({
             include: [
                 {
                     model: Grupa,
                     as: 'grupy',
-                    where: {
-                        id_nauczyciela: teacherId
-                    },
+                    where: groupWhere,
                     required: true,
                     include: [
                         {

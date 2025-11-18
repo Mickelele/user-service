@@ -58,17 +58,19 @@ const CourseController = {
 
     async getMyCourses(req, res) {
         try {
+            console.log('User data from JWT:', req.user);
             const teacherId = req.user.id;
 
             if (!teacherId) {
                 return res.status(403).json({
-                    error: 'Brak identyfikatora nauczyciela w tokenie',
-                    userData: req.user
+                    error: 'Brak identyfikatora nauczyciela w tokenie'
                 });
             }
 
-            console.log(`Pobieranie kursów dla nauczyciela ID: ${teacherId}`);
-            const courses = await CourseService.getCoursesByTeacher(teacherId);
+            const dzienTygodnia = req.query.dzien;
+            console.log(`Pobieranie kursów dla nauczyciela ID: ${teacherId}, dzień: ${dzienTygodnia || 'wszystkie'}`);
+
+            const courses = await CourseService.getCoursesByTeacher(teacherId, dzienTygodnia);
             res.json(courses);
         } catch (err) {
             console.error('Błąd pobierania kursów nauczyciela:', err);
