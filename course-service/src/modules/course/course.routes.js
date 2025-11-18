@@ -11,4 +11,6 @@ router.delete('/usunKurs/:id', CourseController.delete);
 router.get('/:id/grupy', CourseController.findGroupsByCourseId);
 
 
+router.get('/nauczyciel/moje-kursy', authMiddleware, CourseController.getMyCourses);
+
 module.exports = router;

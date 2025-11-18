@@ -2,6 +2,8 @@ const Kurs = require('./course.model');
 const Grupa = require('../group/group.model');
 const Nauczyciel = require('../../../../user-service/src/modules/teacher/teacher.model');
 const User = require('../../../../user-service/src/modules/users/user.model');
+const Zajecia = require('../lesson/lesson.model');
+const { Op } = require('sequelize');
 const axios = require('axios');
 
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:4000';
@@ -67,6 +69,34 @@ const CourseRepository = {
         }));
 
         return grupy;
+    },
+
+
+    async findCoursesByTeacherId(teacherId) {
+        return Kurs.findAll({
+            include: [
+                {
+                    model: Grupa,
+                    as: 'grupy',
+                    where: {
+                        id_nauczyciela: teacherId
+                    },
+                    required: true,
+                    include: [
+                        {
+                            model: Nauczyciel,
+                            as: 'nauczyciel',
+                            where: { id_nauczyciela: teacherId }
+                        },
+                        {
+                            model: Zajecia,
+                            as: 'zajecia'
+                        }
+                    ]
+                }
+            ],
+            distinct: true
+        });
     }
 
 

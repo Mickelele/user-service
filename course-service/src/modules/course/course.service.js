@@ -23,9 +23,13 @@ class CourseService {
         return await CourseRepository.deleteCourse(id);
     }
 
-    //Zwraca wszystkie grupy zapisane na dany kurs
     async findGroupsByCourseId(id) {
         return await CourseRepository.findGroupsByCourseId(id);
+    }
+
+    async getCoursesByTeacher(teacherId) {
+        if (!teacherId) throw new Error('Brak identyfikatora nauczyciela');
+        return await CourseRepository.findCoursesByTeacherId(teacherId);
     }
 
 }
