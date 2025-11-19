@@ -1,4 +1,5 @@
 const GroupRepository = require('./group.repository');
+const LessonService = require('../lesson/lesson.service');
 
 class GroupService {
     async getAll() {
@@ -12,7 +13,12 @@ class GroupService {
     }
 
     async create(data) {
-        return await GroupRepository.createCourse(data);
+        const grupa = await GroupRepository.createCourse(data);
+        if (grupa && data.Kurs_id_kursu) {
+            await LessonService.createLessonsForGroup(grupa.id_grupa);
+        }
+
+        return grupa;
     }
 
     async update(id, data) {
@@ -23,7 +29,6 @@ class GroupService {
         return await GroupRepository.deleteCourse(id);
     }
 
-
     async getStudents(id) {
         return await GroupRepository.getStudents(id);
     }
@@ -31,8 +36,6 @@ class GroupService {
     async adjustStudentCount(id, delta) {
         return await GroupRepository.adjustStudentCount(id, delta);
     }
-
-
 }
 
 module.exports = new GroupService();

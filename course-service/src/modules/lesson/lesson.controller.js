@@ -2,7 +2,6 @@ const LessonService = require('./lesson.service');
 const Zajecia = require('./lesson.model');
 
 const LessonController = {
-
     async getAllForGroup(req, res) {
         try {
             const zajecia = await LessonService.getAllForGroup(req.params.groupId);
@@ -27,9 +26,10 @@ const LessonController = {
 
             const newLesson = await Zajecia.create({
                 id_grupy: groupId,
-                Sala_id_sali: req.body.Sala_id_sali,   // musi być dokładnie taka nazwa jak w modelu
+                Sala_id_sali: req.body.Sala_id_sali,
                 tematZajec: req.body.tematZajec,
                 data: req.body.data,
+                godzina: req.body.godzina, // Teraz godzina jest w modelu
                 notatki_od_nauczyciela: req.body.notatki_od_nauczyciela,
             });
 
@@ -54,6 +54,22 @@ const LessonController = {
             await LessonService.delete(req.params.id);
             res.json({ message: "Usunięto zajęcia" });
         } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+
+    async createLessonsForGroup(req, res) {
+        try {
+            const { groupId } = req.params;
+            const createdLessons = await LessonService.createLessonsForGroup(groupId);
+
+            res.status(201).json({
+                message: `Utworzono ${createdLessons.length} zajęć dla grupy`,
+                zajecia: createdLessons
+            });
+        } catch (err) {
+            console.error(err);
             res.status(400).json({ error: err.message });
         }
     }

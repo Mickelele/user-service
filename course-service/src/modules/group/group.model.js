@@ -31,7 +31,11 @@ Grupa.init({
         type: DataTypes.STRING(20),
         allowNull: false,
         defaultValue: 'Poniedziałek'
-    }
+    },
+    godzina: {
+        type: DataTypes.TIME,
+        allowNull: false
+    },
 }, {
     sequelize,
     modelName: 'Grupa',
