@@ -46,7 +46,6 @@ const CourseController = {
         }
     },
 
-
     async findGroupsByCourseId(req, res) {
         try {
             const groups = await CourseService.findGroupsByCourseId(req.params.id);
@@ -68,17 +67,29 @@ const CourseController = {
             }
 
             const dzienTygodnia = req.query.dzien;
-            console.log(`Pobieranie kursów dla nauczyciela ID: ${teacherId}, dzień: ${dzienTygodnia || 'wszystkie'}`);
+            console.log(`Pobieranie pełnych danych kursów dla nauczyciela ID: ${teacherId}, dzień: ${dzienTygodnia || 'wszystkie'}`);
 
             const courses = await CourseService.getCoursesByTeacher(teacherId, dzienTygodnia);
-            res.json(courses);
+
+            const coursesWithStats = courses.map(course => {
+                const stats = {
+                    totalGroups: course.grupy.length,
+                    totalLessons: course.grupy.reduce((sum, grupa) => sum + grupa.zajecia.length, 0),
+                    totalStudents: course.grupy.reduce((sum, grupa) => sum + grupa.uczniowie.length, 0)
+                };
+
+                return {
+                    ...course,
+                    stats
+                };
+            });
+
+            res.json(coursesWithStats);
         } catch (err) {
-            console.error('Błąd pobierania kursów nauczyciela:', err);
+            console.error('Błąd pobierania pełnych danych kursów nauczyciela:', err);
             res.status(400).json({ error: err.message });
         }
     }
-
-
 };
 
 module.exports = CourseController;

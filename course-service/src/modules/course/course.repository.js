@@ -3,6 +3,8 @@ const Grupa = require('../group/group.model');
 const Nauczyciel = require('../../../../user-service/src/modules/teacher/teacher.model');
 const User = require('../../../../user-service/src/modules/users/user.model');
 const Zajecia = require('../lesson/lesson.model');
+const Uczen = require('../group/student.model');
+const Obecnosc = require('../presence/presence.model');
 const { Op } = require('sequelize');
 const axios = require('axios');
 
@@ -32,8 +34,6 @@ const CourseRepository = {
         if (!course) throw new Error('Kurs nie znaleziony');
         return course.destroy();
     },
-
-
 
     async findGroupsByCourseId(id) {
         const kurs = await Kurs.findByPk(id, {
@@ -71,7 +71,6 @@ const CourseRepository = {
         return grupy;
     },
 
-
     async findCoursesByTeacherId(teacherId, dzienTygodnia = null) {
         const groupWhere = {
             id_nauczyciela: teacherId
@@ -81,7 +80,8 @@ const CourseRepository = {
             groupWhere.dzien_tygodnia = dzienTygodnia;
         }
 
-        return Kurs.findAll({
+
+        const kursy = await Kurs.findAll({
             include: [
                 {
                     model: Grupa,
@@ -96,17 +96,76 @@ const CourseRepository = {
                         },
                         {
                             model: Zajecia,
-                            as: 'zajecia'
+                            as: 'zajecia',
+                            order: [['data', 'ASC']]
                         }
                     ]
                 }
             ],
             distinct: true
         });
+
+
+        const kursyZPelnymiDanymi = await Promise.all(
+            kursy.map(async (kurs) => {
+                const grupyZDanymi = await Promise.all(
+                    kurs.grupy.map(async (grupa) => {
+                        // Pobierz uczniów grupy
+                        const uczniowie = await Uczen.findAll({
+                            where: { id_grupa: grupa.id_grupa }
+                        });
+
+                        const zajeciaZObecnosciami = await Promise.all(
+                            grupa.zajecia.map(async (zajecie) => {
+                                const obecnosci = await Obecnosc.findAll({
+                                    where: { id_zajec: zajecie.id_zajec },
+                                    include: [
+                                        {
+                                            model: Uczen,
+                                            as: 'uczen',
+                                            attributes: ['id_ucznia', 'pseudonim']
+                                        }
+                                    ]
+                                });
+
+                                return {
+                                    ...zajecie.toJSON(),
+                                    obecnosci: obecnosci.map(obecnosc => ({
+                                        id_obecnosci: obecnosc.id_obecnosci,
+                                        id_ucznia: obecnosc.id_ucznia,
+                                        id_zajec: obecnosc.id_zajec,
+                                        czyObecny: obecnosc.czyObecny,
+                                        uczen: obecnosc.uczen ? {
+                                            id_ucznia: obecnosc.uczen.id_ucznia,
+                                            pseudonim: obecnosc.uczen.pseudonim
+                                        } : null
+                                    }))
+                                };
+                            })
+                        );
+
+                        return {
+                            ...grupa.toJSON(),
+                            uczniowie: uczniowie.map(uczen => ({
+                                id_ucznia: uczen.id_ucznia,
+                                pseudonim: uczen.pseudonim,
+                                saldo_punktow: uczen.saldo_punktow,
+                                id_grupa: uczen.id_grupa
+                            })),
+                            zajecia: zajeciaZObecnosciami
+                        };
+                    })
+                );
+
+                return {
+                    ...kurs.toJSON(),
+                    grupy: grupyZDanymi
+                };
+            })
+        );
+
+        return kursyZPelnymiDanymi;
     }
-
-
-
 };
 
 module.exports = CourseRepository;
