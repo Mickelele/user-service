@@ -28,6 +28,19 @@ class PresenceService {
         return PresenceRepository.findForUser(id_ucznia);
     }
 
+    normalizePresenceValue(value) {
+        if (value === true) return 1;
+        if (value === false) return 0;
+        return null;
+    }
+
+
+    async setPresence(id, value) {
+        const normalized = this.normalizePresenceValue(value);
+        return PresenceRepository.update(id, { czyObecny: normalized });
+    }
+
+
 }
 
 module.exports = new PresenceService();

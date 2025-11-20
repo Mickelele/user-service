@@ -55,7 +55,21 @@ const PresenceController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+
+    async setPresence(req, res) {
+        try {
+            const entry = await PresenceService.setPresence(
+                req.params.id,
+                req.body.czyObecny
+            );
+            res.json(entry);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
+
 
 };
 

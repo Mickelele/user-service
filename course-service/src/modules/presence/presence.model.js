@@ -19,7 +19,7 @@ Obecnosc.init({
     },
     czyObecny: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         defaultValue: 1,
         field: 'czyobecny'
     }
