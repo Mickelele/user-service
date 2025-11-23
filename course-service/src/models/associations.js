@@ -4,6 +4,8 @@ const Nauczyciel = require('../modules/course/teacher.model');
 const Uczen = require('../modules/group/student.model');
 const Zajecia = require('../modules/lesson/lesson.model');
 const Obecnosc = require('../modules/presence/presence.model');
+const Sala = require('../modules/room/room.model');
+const Rezerwacja = require('../modules/reservation/reservation.model');
 
 
 //RELACJE KURS ↔ GRUPA
@@ -39,11 +41,26 @@ Uczen.hasMany(Obecnosc, { foreignKey: 'id_ucznia', as: 'obecnosci' });
 Obecnosc.belongsTo(Uczen, { foreignKey: 'id_ucznia', as: 'uczen' });
 
 
+// SALA ↔ ZAJĘCIA  (0..* zajęcia)
+Sala.hasMany(Zajecia, { foreignKey: 'Sala_id_sali', as: 'zajecia' });
+Zajecia.belongsTo(Sala, { foreignKey: 'Sala_id_sali', as: 'sala' });
+
+// SALA ↔ REZERWACJE
+Sala.hasMany(Rezerwacja, { foreignKey: 'id_sali', as: 'rezerwacje' });
+Rezerwacja.belongsTo(Sala, { foreignKey: 'id_sali', as: 'sala' });
+
+// NAUCZYCIEL ↔ REZERWACJE
+Nauczyciel.hasMany(Rezerwacja, { foreignKey: 'id_nauczyciela', as: 'rezerwacje' });
+Rezerwacja.belongsTo(Nauczyciel, { foreignKey: 'id_nauczyciela', as: 'nauczyciel' });
+
+
 module.exports = {
     Kurs,
     Grupa,
     Nauczyciel,
     Uczen,
     Zajecia,
-    Obecnosc
+    Obecnosc,
+    Rezerwacja,
+    Sala
 };

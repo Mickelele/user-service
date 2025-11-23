@@ -6,6 +6,8 @@ const courseRoutes = require('./modules/course/course.routes');
 const groupRoutes = require('./modules/group/group.routes');
 const lessonRoutes = require('./modules/lesson/lesson.routes');
 const presenceRoutes = require('./modules/presence/presence.routes');
+const roomRoutes = require('./modules/room/room.routes');
+const reservationRoutes = require('./modules/reservation/reservation.routes');
 const { initModels } = require('./models');
 
 const app = express();
@@ -23,6 +25,8 @@ app.use('/kursy', courseRoutes);
 app.use('/grupy', groupRoutes);
 app.use('/zajecia', lessonRoutes);
 app.use('/obecnosc', presenceRoutes);
+app.use('/sale', roomRoutes);
+app.use('/rezerwacje', reservationRoutes);
 
 
 const PORT = process.env.PORT || 3000;
