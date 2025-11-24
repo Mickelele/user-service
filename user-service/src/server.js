@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors')
 const { sequelize } = require('./config/db');
 const userRouter = require('./modules/users/user.routes');
 const teacherRouter = require('./modules/teacher/teacher.routes');
