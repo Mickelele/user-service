@@ -1,4 +1,6 @@
 const Zajecia = require('./lesson.model');
+const Grupa = require('../group/group.model');
+const { Op } = require('sequelize');
 
 const LessonRepository = {
     async findAllByGroup(id_grupy) {
@@ -25,6 +27,29 @@ const LessonRepository = {
         if (!zaj) throw new Error("Zajęcia nie znalezione");
         await zaj.destroy();
         return;
+    },
+    async findByTeacherAndMonth(teacherId, year, month) {
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
+
+        const lessons = await Zajecia.findAll({
+            include: [{
+                model: Grupa,
+                as: 'grupa',
+                where: { id_nauczyciela: teacherId }
+            }],
+            where: {
+                data: {
+                    [Op.between]: [startDate, endDate]
+                }
+            },
+            order: [['data', 'ASC']]
+        });
+
+        return lessons.map(l => ({
+            ...l.toJSON(),
+            godzina: l.grupa.godzina
+        }));
     }
 };
 

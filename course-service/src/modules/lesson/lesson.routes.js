@@ -11,4 +11,6 @@ router.get('/zajecia/:id', LessonController.getOne);
 router.put('/zajecia/:id', LessonController.update);
 router.delete('/zajecia/:id', LessonController.delete);
 
+router.post('/teacher/:teacherId/lessons/month', LessonController.getLessonsForTeacherByMonth);
+
 module.exports = router;

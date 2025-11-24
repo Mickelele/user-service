@@ -25,9 +25,12 @@ class LessonService {
         return LessonRepository.delete(id);
     }
 
+    async getLessonsForTeacherByMonth(teacherId, year, month) {
+        return LessonRepository.findByTeacherAndMonth(teacherId, year, month);
+    }
+
     async createLessonsForGroup(id_grupa) {
         try {
-            // Pobierz dane grupy z kursem
             const grupa = await Grupa.findByPk(id_grupa, {
                 include: [{
                     model: Kurs,
@@ -68,7 +71,6 @@ class LessonService {
                         Sala_id_sali: 1,
                         tematZajec: "Brak",
                         data: new Date(currentDate),
-                        godzina: godzinaGrupy,
                         notatki_od_nauczyciela: "Brak"
                     };
                     zajeciaDoUtworzenia.push(zajecie);

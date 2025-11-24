@@ -1,5 +1,7 @@
 const LessonService = require('./lesson.service');
 const Zajecia = require('./lesson.model');
+const { getTeacherIdFromToken } = require('../middleware/auth.utils');
+
 
 const LessonController = {
     async getAllForGroup(req, res) {
@@ -29,7 +31,7 @@ const LessonController = {
                 Sala_id_sali: req.body.Sala_id_sali,
                 tematZajec: req.body.tematZajec,
                 data: req.body.data,
-                godzina: req.body.godzina, // Teraz godzina jest w modelu
+                godzina: req.body.godzina,
                 notatki_od_nauczyciela: req.body.notatki_od_nauczyciela,
             });
 
@@ -54,6 +56,30 @@ const LessonController = {
             await LessonService.delete(req.params.id);
             res.json({ message: "Usunięto zajęcia" });
         } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+
+    async getLessonsForTeacherByMonth(req, res) {
+        try {
+            // Pobieramy teacherId z tokena, ignorujemy :teacherId w URL
+            const teacherId = getTeacherIdFromToken(req);
+            const { year, month } = req.body;
+
+            if (!year || !month) {
+                return res.status(400).json({ error: "Brakuje roku lub miesiąca" });
+            }
+
+            const lessons = await LessonService.getLessonsForTeacherByMonth(
+                teacherId,
+                parseInt(year),
+                parseInt(month)
+            );
+
+            res.json(lessons);
+        } catch (err) {
+            console.error(err);
             res.status(400).json({ error: err.message });
         }
     },
