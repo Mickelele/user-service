@@ -30,6 +30,10 @@ Zajecia.init({
     notatki_od_nauczyciela: {
         type: DataTypes.STRING(500),
         allowNull: true
+    },
+    uwaga_do_sprzetu: {
+        type: DataTypes.STRING(200),
+        allowNull: true
     }
 }, {
     sequelize,

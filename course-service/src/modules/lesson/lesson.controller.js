@@ -33,6 +33,7 @@ const LessonController = {
                 data: req.body.data,
                 godzina: req.body.godzina,
                 notatki_od_nauczyciela: req.body.notatki_od_nauczyciela,
+                uwaga_do_sprzetu: req.body.uwaga_do_sprzetu
             });
 
             res.json(newLesson);
@@ -63,7 +64,6 @@ const LessonController = {
 
     async getLessonsForTeacherByMonth(req, res) {
         try {
-            // Pobieramy teacherId z tokena, ignorujemy :teacherId w URL
             const teacherId = getTeacherIdFromToken(req);
             const { year, month } = req.body;
 
@@ -98,7 +98,8 @@ const LessonController = {
             console.error(err);
             res.status(400).json({ error: err.message });
         }
-    }
+    },
+
 };
 
 module.exports = LessonController;
