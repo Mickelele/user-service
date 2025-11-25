@@ -80,7 +80,6 @@ const CourseRepository = {
             groupWhere.dzien_tygodnia = dzienTygodnia;
         }
 
-
         const kursy = await Kurs.findAll({
             include: [
                 {
@@ -105,15 +104,37 @@ const CourseRepository = {
             distinct: true
         });
 
-
         const kursyZPelnymiDanymi = await Promise.all(
             kursy.map(async (kurs) => {
                 const grupyZDanymi = await Promise.all(
                     kurs.grupy.map(async (grupa) => {
-                        // Pobierz uczniów grupy
                         const uczniowie = await Uczen.findAll({
                             where: { id_grupa: grupa.id_grupa }
                         });
+
+
+                        const uczniowieZDanymi = await Promise.all(
+                            uczniowie.map(async (uczen) => {
+                                let userData = null;
+                                try {
+                                    const response = await axios.get(`${USER_SERVICE_URL}/user/${uczen.id_ucznia}`);
+                                    userData = response.data;
+                                } catch (err) {
+                                    console.warn(`Nie udało się pobrać danych użytkownika ${uczen.id_ucznia}: ${err.message}`);
+                                }
+
+                                return {
+                                    id_ucznia: uczen.id_ucznia,
+                                    pseudonim: uczen.pseudonim,
+                                    saldo_punktow: uczen.saldo_punktow,
+                                    id_grupa: uczen.id_grupa,
+
+                                    imie: userData?.imie || null,
+                                    nazwisko: userData?.nazwisko || null,
+                                    email: userData?.email || null
+                                };
+                            })
+                        );
 
                         const zajeciaZObecnosciami = await Promise.all(
                             grupa.zajecia.map(async (zajecie) => {
@@ -146,12 +167,7 @@ const CourseRepository = {
 
                         return {
                             ...grupa.toJSON(),
-                            uczniowie: uczniowie.map(uczen => ({
-                                id_ucznia: uczen.id_ucznia,
-                                pseudonim: uczen.pseudonim,
-                                saldo_punktow: uczen.saldo_punktow,
-                                id_grupa: uczen.id_grupa
-                            })),
+                            uczniowie: uczniowieZDanymi,
                             zajecia: zajeciaZObecnosciami
                         };
                     })
