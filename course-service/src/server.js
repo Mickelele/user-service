@@ -8,6 +8,7 @@ const lessonRoutes = require('./modules/lesson/lesson.routes');
 const presenceRoutes = require('./modules/presence/presence.routes');
 const roomRoutes = require('./modules/room/room.routes');
 const reservationRoutes = require('./modules/reservation/reservation.routes');
+const commentRoutes = require('./modules/comment/comment.routes');
 const { initModels } = require('./models');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/zajecia', lessonRoutes);
 app.use('/obecnosc', presenceRoutes);
 app.use('/sale', roomRoutes);
 app.use('/rezerwacje', reservationRoutes);
+app.use('/uwagi', commentRoutes);
 
 
 const PORT = process.env.PORT || 3000;
