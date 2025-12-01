@@ -6,7 +6,8 @@ const Zajecia = require('../modules/lesson/lesson.model');
 const Obecnosc = require('../modules/presence/presence.model');
 const Sala = require('../modules/room/room.model');
 const Rezerwacja = require('../modules/reservation/reservation.model');
-
+const ZadanieDomowe = require('../modules/homework/zadanieDomowe.model');
+const OdpowiedzNaZadanie = require('../modules/homework_answer/odpowiedzNaZadanie.model');
 
 //RELACJE KURS ↔ GRUPA
 Kurs.hasMany(Grupa, { foreignKey: 'Kurs_id_kursu', as: 'grupy' });
@@ -54,6 +55,38 @@ Nauczyciel.hasMany(Rezerwacja, { foreignKey: 'id_nauczyciela', as: 'rezerwacje' 
 Rezerwacja.belongsTo(Nauczyciel, { foreignKey: 'id_nauczyciela', as: 'nauczyciel' });
 
 
+
+Grupa.hasMany(ZadanieDomowe, {
+    foreignKey: 'id_grupy',
+    as: 'zadania'
+});
+ZadanieDomowe.belongsTo(Grupa, {
+    foreignKey: 'id_grupy',
+    as: 'grupa'
+});
+
+ZadanieDomowe.hasMany(OdpowiedzNaZadanie, {
+    foreignKey: 'id_zadania',
+    as: 'odpowiedzi'
+});
+OdpowiedzNaZadanie.belongsTo(ZadanieDomowe, {
+    foreignKey: 'id_zadania',
+    as: 'zadanie'
+});
+
+Uczen.hasMany(OdpowiedzNaZadanie, {
+    foreignKey: 'id_ucznia',
+    as: 'odpowiedzi'
+});
+OdpowiedzNaZadanie.belongsTo(Uczen, {
+    foreignKey: 'id_ucznia',
+    as: 'uczen'
+});
+
+
+
+
+
 module.exports = {
     Kurs,
     Grupa,
@@ -62,5 +95,7 @@ module.exports = {
     Zajecia,
     Obecnosc,
     Rezerwacja,
-    Sala
+    Sala,
+    ZadanieDomowe,
+    OdpowiedzNaZadanie
 };

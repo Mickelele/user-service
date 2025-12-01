@@ -36,6 +36,11 @@ class GroupService {
     async adjustStudentCount(id, delta) {
         return await GroupRepository.adjustStudentCount(id, delta);
     }
+
+    async getHomeworks(id) {
+        return await GroupRepository.getHomeworks(id);
+    }
+
 }
 
 module.exports = new GroupService();

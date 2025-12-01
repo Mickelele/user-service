@@ -9,6 +9,8 @@ const presenceRoutes = require('./modules/presence/presence.routes');
 const roomRoutes = require('./modules/room/room.routes');
 const reservationRoutes = require('./modules/reservation/reservation.routes');
 const commentRoutes = require('./modules/comment/comment.routes');
+const homeworkRoutes = require('./modules/homework/zadanieDomowe.routes');
+const homeworkAnswerRoutes = require('./modules/homework_answer/odpowiedzNaZadanie.routes');
 const { initModels } = require('./models');
 
 const app = express();
@@ -29,6 +31,8 @@ app.use('/obecnosc', presenceRoutes);
 app.use('/sale', roomRoutes);
 app.use('/rezerwacje', reservationRoutes);
 app.use('/uwagi', commentRoutes);
+app.use('/zadania', homeworkRoutes);
+app.use('/odpowiedzi', homeworkAnswerRoutes);
 
 
 const PORT = process.env.PORT || 3000;

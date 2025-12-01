@@ -81,7 +81,16 @@ const GroupController = {
                 error: error.message
             });
         }
+    },
+    async getHomeworks(req, res) {
+        try {
+            const zadania = await GroupService.getHomeworks(req.params.id);
+            res.json(zadania);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
+
 
 
 

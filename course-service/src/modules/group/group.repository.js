@@ -1,5 +1,6 @@
 const Grupa = require('./group.model');
 const Uczen = require('./student.model');
+const ZadanieDomowe = require('../homework/zadanieDomowe.model');
 
 const GroupRepository = {
     async findAll() {
@@ -46,6 +47,19 @@ const GroupRepository = {
 
         await grupa.save();
         return grupa;
+    },
+
+
+    async getHomeworks(id_grupa) {
+        const grupa = await Grupa.findByPk(id_grupa, {
+            include: [
+                { model: ZadanieDomowe, as: 'zadania' }
+            ]
+        });
+
+        if (!grupa) throw new Error('Grupa nie znaleziona');
+
+        return grupa.zadania;
     }
 
 

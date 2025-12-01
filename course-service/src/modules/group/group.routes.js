@@ -13,6 +13,8 @@ router.post('/dodajGrupe', GroupController.create);
 router.put('/aktualizujGrupe/:id', GroupController.update);
 router.delete('/usunGrupe/:id', GroupController.delete);
 router.patch('/:id/adjust', GroupController.adjustStudentCount);
+router.get('/:id/zadania', GroupController.getHomeworks);
+
 
 
 
