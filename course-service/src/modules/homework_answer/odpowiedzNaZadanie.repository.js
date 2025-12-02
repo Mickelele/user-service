@@ -42,7 +42,14 @@ const HomeworkAnswerRepository = {
     async getAnswersByStudents(studentIds) {
         return await OdpowiedzNaZadanie.findAll({
             where: { id_ucznia: studentIds },
-            order: [['id_odpowiedzi', 'DESC']]
+            order: [['id_odpowiedzi', 'DESC']],
+            include: [
+                {
+                    model: require('../homework/zadanieDomowe.model'),
+                    as: 'zadanie'
+                }
+            ]
+
         });
     }
 

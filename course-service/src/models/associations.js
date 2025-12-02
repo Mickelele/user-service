@@ -86,7 +86,6 @@ OdpowiedzNaZadanie.belongsTo(Uczen, {
 
 
 
-
 module.exports = {
     Kurs,
     Grupa,
