@@ -30,7 +30,22 @@ const HomeworkAnswerRepository = {
         return await OdpowiedzNaZadanie.findOne({
             where: { id_zadania, id_ucznia }
         });
+    },
+
+    async getAnswersByStudentId(id_ucznia) {
+        return await OdpowiedzNaZadanie.findAll({
+            where: { id_ucznia },
+            order: [['id_odpowiedzi', 'DESC']]
+        });
+    },
+
+    async getAnswersByStudents(studentIds) {
+        return await OdpowiedzNaZadanie.findAll({
+            where: { id_ucznia: studentIds },
+            order: [['id_odpowiedzi', 'DESC']]
+        });
     }
+
 };
 
 module.exports = HomeworkAnswerRepository;

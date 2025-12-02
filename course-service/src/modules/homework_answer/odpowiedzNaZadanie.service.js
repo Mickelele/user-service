@@ -31,6 +31,20 @@ class HomeworkAnswerService {
         }
         return await HomeworkAnswerRepository.getStudentAnswer(id_zadania, id_ucznia);
     }
+
+    async getHomeworksForStudent(id_ucznia) {
+        if (!id_ucznia) throw new Error("Brak id_ucznia");
+
+        return await HomeworkAnswerRepository.getAnswersByStudentId(id_ucznia);
+    }
+
+    async getHomeworksForStudents(studentIds) {
+        if (!Array.isArray(studentIds) || studentIds.length === 0) {
+            throw new Error("Brak listy id uczniów");
+        }
+
+        return await HomeworkAnswerRepository.getAnswersByStudents(studentIds);
+    }
 }
 
 module.exports = new HomeworkAnswerService();

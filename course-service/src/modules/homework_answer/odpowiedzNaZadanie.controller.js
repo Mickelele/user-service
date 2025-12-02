@@ -1,4 +1,6 @@
 const HomeworkAnswerService = require('./odpowiedzNaZadanie.service');
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL;
+const axios = require('axios');
 
 const HomeworkAnswerController = {
     async create(req, res) {
@@ -60,6 +62,40 @@ const HomeworkAnswerController = {
 
             const odpowiedz = await HomeworkAnswerService.getStudentAnswer(id_zadania, id_ucznia);
             res.status(200).json(odpowiedz);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+
+    async getMyHomeworks(req, res) {
+        try {
+            const id_ucznia = req.user.id;
+
+            const odpowiedzi = await HomeworkAnswerService.getHomeworksForStudent(id_ucznia);
+
+            res.status(200).json(odpowiedzi);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+    async getHomeworksByGuardian(req, res) {
+        try {
+            const { id_opiekuna } = req.params;
+
+            const result = await axios.get(`${USER_SERVICE_URL}/opiekunowie/${id_opiekuna}/uczniowie`);
+            const uczniowie = result.data;
+
+            if (!uczniowie.length) {
+                return res.status(200).json([]);
+            }
+
+            const ids = uczniowie.map(u => u.id_ucznia);
+
+            const odpowiedzi = await HomeworkAnswerService.getHomeworksForStudents(ids);
+
+            res.status(200).json(odpowiedzi);
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
