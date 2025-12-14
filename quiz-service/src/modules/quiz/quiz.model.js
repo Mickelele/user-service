@@ -19,7 +19,7 @@ Quiz.init({
     },
     Zajecia_id_zajec: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'zajecia_id_zajec'
     }
 }, {
