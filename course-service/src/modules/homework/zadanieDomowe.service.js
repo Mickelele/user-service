@@ -5,8 +5,11 @@ class HomeworkService {
         if (!data.id_grupy) {
             throw new Error("Brak id_grupy");
         }
-
         return await HomeworkRepository.createHomework(data);
+    }
+
+    async getHomeworkForGroup(id_grupy, id_ucznia) {
+        return await HomeworkRepository.getHomeworkByGroupId(id_grupy, id_ucznia);
     }
 }
 
