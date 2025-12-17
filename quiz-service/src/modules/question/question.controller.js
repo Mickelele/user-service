@@ -54,6 +54,14 @@ class QuestionController {
             res.status(404).json({ error: err.message });
         }
     }
+
+    async test(req, res) {
+        try {
+            res.status(204).send();
+        } catch (err) {
+            res.status(404).json({ error: err.message });
+        }
+    }
 }
 
 module.exports = new QuestionController();
