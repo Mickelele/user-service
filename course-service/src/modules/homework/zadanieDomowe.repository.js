@@ -1,6 +1,17 @@
 const { sequelize } = require('../../config/db');
+const ZadanieDomowe = require('./zadanieDomowe.model');
 
 const HomeworkRepository = {
+    async createHomework(data) {
+        const homework = await ZadanieDomowe.create({
+            id_grupy: data.id_grupy,
+            tytul: data.tytul,
+            opis: data.opis,
+            termin: data.termin
+        });
+        return homework;
+    },
+
     async getHomeworkByGroupId(id_grupy, id_ucznia) {
         const groupId = Number(id_grupy);
         const studentId = Number(id_ucznia);
