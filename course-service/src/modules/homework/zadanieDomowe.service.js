@@ -11,6 +11,8 @@ class HomeworkService {
     async getHomeworkForGroup(id_grupy, id_ucznia) {
         return await HomeworkRepository.getHomeworkByGroupId(id_grupy, id_ucznia);
     }
+
+
 }
 
 module.exports = new HomeworkService();
