@@ -98,7 +98,6 @@ class UczenService {
 
 
 
-
 }
 
 module.exports = new UczenService();

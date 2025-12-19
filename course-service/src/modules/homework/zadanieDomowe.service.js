@@ -12,6 +12,10 @@ class HomeworkService {
         return await HomeworkRepository.getHomeworkByGroupId(id_grupy, id_ucznia);
     }
 
+    async getAllHomeworkForGroupWithStatus(id_grupy, id_ucznia) {
+        return await HomeworkRepository.getAllHomeworkByGroupIdWithStatus(id_grupy, id_ucznia);
+    }
+
 
 }
 
