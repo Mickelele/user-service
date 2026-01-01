@@ -14,7 +14,6 @@ router.put('/:id', UczenController.update);
 router.delete('/:id', UczenController.delete);
 
 router.post('/zapiszNaGrupe', authMiddleware, UczenController.zapiszNaGrupe);
-
-
+router.patch('/:uczenId/assign-guardian', authMiddleware, UczenController.assignGuardian);
 
 module.exports = router;

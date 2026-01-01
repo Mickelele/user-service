@@ -71,11 +71,20 @@ const UczenController = {
             console.error(err);
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async assignGuardian(req, res) {
+        try {
+            const { uczenId } = req.params;
+            const { opiekunId } = req.body;
+            
+            const updated = await UczenService.assignGuardian(uczenId, opiekunId);
+            res.json(updated);
+        } catch (err) {
+            console.error('Błąd przy przypisywaniu opiekuna:', err);
+            res.status(400).json({ error: err.message });
+        }
     }
-
-
-
-
 };
 
 module.exports = UczenController;

@@ -92,12 +92,18 @@ class UczenService {
         return newStudent;
     }
 
+    async assignGuardian(uczenId, opiekunId) {
+        if (!uczenId) {
+            throw new Error('ID ucznia jest wymagane');
+        }
+        
+        if (!opiekunId) {
+            throw new Error('ID opiekuna jest wymagane');
+        }
 
-
-
-
-
-
+        const updated = await UczenRepository.assignGuardian(uczenId, opiekunId);
+        return updated;
+    }
 }
 
 module.exports = new UczenService();

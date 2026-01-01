@@ -26,10 +26,11 @@ const UczenRepository = {
         return { message: 'Usunięto ucznia' };
     },
 
-
-
-
-
+    async assignGuardian(uczenId, opiekunId) {
+        const uczen = await Uczen.findByPk(uczenId);
+        if (!uczen) throw new Error('Uczeń nie znaleziony');
+        return await uczen.update({ Opiekun_id_opiekuna: opiekunId });
+    }
 };
 
 module.exports = UczenRepository;
