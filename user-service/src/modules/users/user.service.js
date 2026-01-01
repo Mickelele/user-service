@@ -58,6 +58,30 @@ class UserService {
     async createUser(data) {
         return UserRepository.createUser(data);
     }
+
+    async changeData(id, data) {
+        const user = await UserRepository.findById(id);
+        if (!user) throw new Error(`Nie znaleziono użytkownika o numerze ${id}`);
+
+        const { imie, nazwisko, email, rola, id_zdjecia } = data;
+        
+        if (email && email !== user.email) {
+            const existingUser = await UserRepository.findByEmail(email);
+            if (existingUser) {
+                throw new Error('Email jest już zajęty przez innego użytkownika');
+            }
+        }
+
+        if (imie !== undefined) user.imie = imie;
+        if (nazwisko !== undefined) user.nazwisko = nazwisko;
+        if (email !== undefined) user.email = email;
+        if (rola !== undefined) user.rola = rola;
+        if (id_zdjecia !== undefined) user.id_zdjecia = id_zdjecia;
+
+        await UserRepository.updateUser(user);
+        
+        return UserRepository.findById(id);
+    }
 }
 
 module.exports = new UserService();

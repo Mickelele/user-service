@@ -104,6 +104,30 @@ const UserController = {
             res.status(400).json({ error: err.message });
         }
     },
+
+    async changeData(req, res) {
+        try {
+            const { id } = req.params;
+            const updated = await UserService.changeData(id, req.body);
+            
+            let zdjecie = null;
+            if (updated.zdjecie) {
+                zdjecie = {
+                    nazwa: updated.zdjecie.nazwa,
+                    dane: updated.zdjecie.zawartosc
+                        ? updated.zdjecie.zawartosc.toString('base64')
+                        : null
+                };
+            }
+
+            const { haslo, ...userData } = updated.toJSON();
+            res.json({ ...userData, zdjecie });
+        } catch (err) {
+            console.error('Błąd przy aktualizacji danych użytkownika:', err);
+            res.status(400).json({ error: err.message });
+        }
+    },
+
     async test(req, res) {
         try {
             return res.status(200).json({
