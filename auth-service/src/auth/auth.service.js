@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const AuthRepository = require('./auth.repository');
+const axios = require('axios');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 const TOKEN_EXP = '2h';
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3000';
 
 
 class AuthService {
@@ -18,6 +20,20 @@ class AuthService {
             haslo: haslo,
             rola: 'opiekun'
         });
+
+        try {
+            const statusResponse = await axios.get(`${USER_SERVICE_URL}/status/rola-status`);
+            const statusAktywny = statusResponse.data.find(s => s.status === 'aktywny');
+            
+            if (statusAktywny) {
+                await axios.post(`${USER_SERVICE_URL}/status/historia/internal`, {
+                    id_uzytkownik: user.id_uzytkownika,
+                    id_statusu: statusAktywny.id_statusu
+                });
+            }
+        } catch (err) {
+            console.error('Błąd podczas tworzenia statusu dla nowego użytkownika:', err.message);
+        }
 
         return { id: user.id_uzytkownika, email: user.email };
     }

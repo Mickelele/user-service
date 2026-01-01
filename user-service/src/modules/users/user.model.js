@@ -23,10 +23,5 @@ User.init({
     tableName: 'uzytkownik',
     timestamps: false
 });
-const Zdjecie = require('../zdjecie/zdjecie.model');
-
-User.belongsTo(Zdjecie, { foreignKey: 'id_zdjecia', as: 'zdjecie' });
-
-
 
 module.exports = User;

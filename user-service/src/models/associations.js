@@ -3,6 +3,8 @@ const Zdjecie = require('../modules/zdjecie/zdjecie.model');
 const Nauczyciel = require('../modules/teacher/teacher.model');
 const Uczen = require('../modules/student/student.model');
 const Opiekun = require('../modules/guardian/guardian.model');
+const RolaStatus = require('../modules/status/rolaStatus.model');
+const HistoriaStatusow = require('../modules/status/historiaStatusow.model');
 
 User.belongsTo(Zdjecie, {
     foreignKey: 'id_zdjecia',
@@ -45,10 +47,31 @@ User.hasOne(Opiekun, {
     as: 'opiekun'
 });
 
+// Historia statusów - związki
+HistoriaStatusow.belongsTo(User, {
+    foreignKey: 'id_uzytkownik',
+    as: 'uzytkownik'
+});
+User.hasMany(HistoriaStatusow, {
+    foreignKey: 'id_uzytkownik',
+    as: 'historiaStatusow'
+});
+
+HistoriaStatusow.belongsTo(RolaStatus, {
+    foreignKey: 'id_statusu',
+    as: 'rolaStatus'
+});
+RolaStatus.hasMany(HistoriaStatusow, {
+    foreignKey: 'id_statusu',
+    as: 'historiaStatusow'
+});
+
 module.exports = {
     User,
     Zdjecie,
     Nauczyciel,
     Uczen,
-    Opiekun
+    Opiekun,
+    RolaStatus,
+    HistoriaStatusow
 };
