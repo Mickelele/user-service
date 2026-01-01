@@ -11,11 +11,11 @@ Uczen.init({
     },
     id_grupa: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     Opiekun_id_opiekuna: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'opiekun_id_opiekuna'
     },
     saldo_punktow: {
