@@ -5,6 +5,9 @@ const Uczen = require('../modules/student/student.model');
 const Opiekun = require('../modules/guardian/guardian.model');
 const RolaStatus = require('../modules/status/rolaStatus.model');
 const HistoriaStatusow = require('../modules/status/historiaStatusow.model');
+const TaskStatus = require('../modules/todo/taskStatus.model');
+const ListaZadan = require('../modules/todo/listaZadan.model');
+const Zadanie = require('../modules/todo/zadanie.model');
 
 User.belongsTo(Zdjecie, {
     foreignKey: 'id_zdjecia',
@@ -66,6 +69,42 @@ RolaStatus.hasMany(HistoriaStatusow, {
     as: 'historiaStatusow'
 });
 
+ListaZadan.belongsTo(Uczen, {
+    foreignKey: 'id_ucznia',
+    as: 'uczen'
+});
+Uczen.hasMany(ListaZadan, {
+    foreignKey: 'id_ucznia',
+    as: 'listyZadan'
+});
+
+Zadanie.belongsTo(ListaZadan, {
+    foreignKey: 'id_lista',
+    as: 'lista'
+});
+ListaZadan.hasMany(Zadanie, {
+    foreignKey: 'id_lista',
+    as: 'zadania'
+});
+
+Zadanie.belongsTo(Uczen, {
+    foreignKey: 'id_ucznia',
+    as: 'uczen'
+});
+Uczen.hasMany(Zadanie, {
+    foreignKey: 'id_ucznia',
+    as: 'zadania'
+});
+
+Zadanie.belongsTo(TaskStatus, {
+    foreignKey: 'id_statusu',
+    as: 'status'
+});
+TaskStatus.hasMany(Zadanie, {
+    foreignKey: 'id_statusu',
+    as: 'zadania'
+});
+
 module.exports = {
     User,
     Zdjecie,
@@ -73,5 +112,8 @@ module.exports = {
     Uczen,
     Opiekun,
     RolaStatus,
-    HistoriaStatusow
+    HistoriaStatusow,
+    TaskStatus,
+    ListaZadan,
+    Zadanie
 };

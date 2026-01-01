@@ -7,6 +7,7 @@ const teacherRouter = require('./modules/teacher/teacher.routes');
 const guardianRouter = require('./modules/guardian/guardian.routes');
 const studentRouter = require('./modules/student/student.routes');
 const statusRouter = require('./modules/status/status.routes');
+const todoRouter = require('./modules/todo/todo.routes');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/nauczyciele', teacherRouter);
 app.use('/opiekunowie', guardianRouter);
 app.use('/uczniowie', studentRouter);
 app.use('/status', statusRouter);
+app.use('/todo', todoRouter);
 
 const PORT = process.env.PORT || 3000;
 
