@@ -30,6 +30,13 @@ const UserRepository = {
 
     async updateUser(user) {
         return user.save();
+    },
+
+    async findByResetToken(token) {
+        return User.findOne({ 
+            where: { reset_token: token },
+            attributes: ['id_uzytkownika', 'email', 'reset_token', 'reset_token_expire_time']
+        });
     }
 };
 

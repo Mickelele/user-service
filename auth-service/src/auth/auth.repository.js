@@ -20,6 +20,32 @@ const AuthRepository = {
 
         return userRes.data;
     },
+
+    async updateResetToken(userId, resetToken, expireTime) {
+        const res = await axios.put(`${USER_SERVICE_URL}/user/${userId}`, {
+            reset_token: resetToken,
+            reset_token_expire_time: expireTime
+        });
+        return res.data;
+    },
+
+    async findByResetToken(token) {
+        try {
+            const res = await axios.get(`${USER_SERVICE_URL}/user/reset-token/${token}`);
+            return res.data;
+        } catch (err) {
+            return null;
+        }
+    },
+
+    async updatePassword(userId, hashedPassword) {
+        const res = await axios.put(`${USER_SERVICE_URL}/user/${userId}`, {
+            haslo: hashedPassword,
+            reset_token: null,
+            reset_token_expire_time: null
+        });
+        return res.data;
+    }
 };
 
 module.exports = AuthRepository;

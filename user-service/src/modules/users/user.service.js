@@ -77,10 +77,19 @@ class UserService {
         if (email !== undefined) user.email = email;
         if (rola !== undefined) user.rola = rola;
         if (id_zdjecia !== undefined) user.id_zdjecia = id_zdjecia;
+        if (data.haslo !== undefined) user.haslo = data.haslo;
+        if (data.reset_token !== undefined) user.reset_token = data.reset_token;
+        if (data.reset_token_expire_time !== undefined) user.reset_token_expire_time = data.reset_token_expire_time;
 
         await UserRepository.updateUser(user);
         
         return UserRepository.findById(id);
+    }
+
+    async getUserByResetToken(token) {
+        const user = await UserRepository.findByResetToken(token);
+        if (!user) throw new Error('Nie znaleziono użytkownika z tym tokenem');
+        return user;
     }
 }
 

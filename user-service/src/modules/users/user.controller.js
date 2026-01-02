@@ -128,6 +128,17 @@ const UserController = {
         }
     },
 
+    async getUserByResetToken(req, res) {
+        try {
+            const { token } = req.params;
+            const user = await UserService.getUserByResetToken(token);
+            res.json(user);
+        } catch (err) {
+            console.error('Błąd przy pobieraniu użytkownika po tokenie:', err);
+            res.status(404).json({ error: err.message });
+        }
+    },
+
     async test(req, res) {
         try {
             return res.status(200).json({

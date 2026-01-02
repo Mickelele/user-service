@@ -1,7 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const AuthRepository = require('./auth.repository');
 const axios = require('axios');
+const EmailService = require('../services/email.service');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 const TOKEN_EXP = '2h';
@@ -75,6 +77,53 @@ class AuthService {
         } catch {
             return null;
         }
+    }
+
+    async requestPasswordReset(email) {
+        const user = await AuthRepository.findByEmail(email);
+        if (!user) {
+            throw new Error('Nie znaleziono użytkownika z tym adresem email');
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const resetTokenExpire = new Date(Date.now() + 3600000);
+
+        await AuthRepository.updateResetToken(user.id_uzytkownika, resetToken, resetTokenExpire);
+
+        try {
+            await EmailService.sendPasswordResetEmail(email, resetToken);
+        } catch (emailError) {
+            console.error('Błąd wysyłania emaila:', emailError.message);
+            throw new Error('Nie udało się wysłać emaila z linkiem resetowania');
+        }
+
+        return {
+            message: 'Email z linkiem do resetowania hasła został wysłany'
+        };
+    }
+
+    async resetPassword(token, newPassword) {
+        if (!token || !newPassword) {
+            throw new Error('Token i nowe hasło są wymagane');
+        }
+
+        if (newPassword.length < 6) {
+            throw new Error('Hasło musi mieć minimum 6 znaków');
+        }
+
+        const user = await AuthRepository.findByResetToken(token);
+        if (!user) {
+            throw new Error('Nieprawidłowy lub wygasły token resetowania');
+        }
+
+        if (new Date() > new Date(user.reset_token_expire_time)) {
+            throw new Error('Token resetowania hasła wygasł');
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await AuthRepository.updatePassword(user.id_uzytkownika, hashedPassword);
+
+        return { message: 'Hasło zostało zresetowane pomyślnie' };
     }
 }
 

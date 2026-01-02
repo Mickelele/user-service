@@ -16,6 +16,14 @@ User.init({
     rola: {
         type: DataTypes.ENUM('uczen', 'opiekun', 'nauczyciel', 'administrator', 'gosc'),
         allowNull: false,
+    },
+    reset_token: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    reset_token_expire_time: {
+        type: DataTypes.DATE,
+        allowNull: true
     }
 }, {
     sequelize,
