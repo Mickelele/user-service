@@ -2,6 +2,18 @@ const nodemailer = require('nodemailer');
 
 class EmailService {
     constructor() {
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+            console.warn('UWAGA: Zmienne EMAIL_USER lub EMAIL_PASSWORD nie są ustawione!');
+            console.warn('Wysyłanie emaili nie będzie działać.');
+        }
+
+        console.log('Konfiguracja email:', {
+            host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+            port: process.env.EMAIL_PORT || 587,
+            user: process.env.EMAIL_USER ? '***' + process.env.EMAIL_USER.slice(-10) : 'BRAK',
+            hasPassword: !!process.env.EMAIL_PASSWORD
+        });
+
         this.transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST || 'smtp.gmail.com',
             port: process.env.EMAIL_PORT || 587,
@@ -44,7 +56,13 @@ class EmailService {
             return true;
         } catch (error) {
             console.error('Błąd wysyłania emaila:', error);
-            throw new Error('Nie udało się wysłać emaila z linkiem resetowania');
+            console.error('Szczegóły błędu:', {
+                message: error.message,
+                code: error.code,
+                response: error.response,
+                responseCode: error.responseCode
+            });
+            throw new Error(`Nie udało się wysłać emaila: ${error.message}`);
         }
     }
 }

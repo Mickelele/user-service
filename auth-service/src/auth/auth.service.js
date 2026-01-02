@@ -41,16 +41,29 @@ class AuthService {
     }
 
     async login({ email, haslo }) {
+        console.log('Próba logowania dla:', email);
+        
         const user = await AuthRepository.findByEmail(email);
-        if (!user) throw new Error('Nieprawidłowe dane email');
+        if (!user) {
+            console.log('Użytkownik nie znaleziony');
+            throw new Error('Nieprawidłowe dane email');
+        }
 
+        console.log('Znaleziono użytkownika:', user.id_uzytkownika);
+        console.log('Czy ma hasło w bazie:', !!user.haslo);
 
+        if (!user.haslo) {
+            console.error('BŁĄD: Użytkownik nie ma hasła w bazie!');
+            throw new Error('Konto nie ma ustawionego hasła');
+        }
 
-        const ok = await bcrypt.compare(haslo, user.haslo)
-        console.log("okkkkk " + ok)
-        console.log("haslo " + haslo)
-        console.log("haslodb " + user.haslo)
-        console.log(user)
+        if (!haslo) {
+            throw new Error('Hasło jest wymagane');
+        }
+
+        const ok = await bcrypt.compare(haslo, user.haslo);
+        console.log('Wynik porównania hasła:', ok);
+        
         if (!ok) throw new Error('Nieprawidłowe dane');
 
         const token = jwt.sign({
@@ -94,7 +107,7 @@ class AuthService {
             await EmailService.sendPasswordResetEmail(email, resetToken);
         } catch (emailError) {
             console.error('Błąd wysyłania emaila:', emailError.message);
-            throw new Error('Nie udało się wysłać emaila z linkiem resetowania');
+            throw emailError;
         }
 
         return {
