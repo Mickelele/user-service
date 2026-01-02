@@ -28,6 +28,15 @@ class QuizController {
         }
     }
 
+    async getByGroup(req, res) {
+        try {
+            const quizzes = await QuizService.getByGroup(req.params.groupId);
+            res.json(quizzes);
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    }
+
     async create(req, res) {
         try {
             const quiz = await QuizService.create(req.body);

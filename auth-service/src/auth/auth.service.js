@@ -105,14 +105,17 @@ class AuthService {
 
         try {
             await EmailService.sendPasswordResetEmail(email, resetToken);
+            return {
+                message: 'Email z linkiem do resetowania hasła został wysłany'
+            };
         } catch (emailError) {
             console.error('Błąd wysyłania emaila:', emailError.message);
-            throw emailError;
+            console.log('TOKEN DO TESTÓW:', resetToken);
+            return {
+                message: 'Nie udało się wysłać emaila, ale token został wygenerowany (tryb testowy)',
+                token: resetToken
+            };
         }
-
-        return {
-            message: 'Email z linkiem do resetowania hasła został wysłany'
-        };
     }
 
     async resetPassword(token, newPassword) {

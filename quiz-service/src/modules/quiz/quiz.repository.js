@@ -1,7 +1,10 @@
 const Quiz = require('./quiz.model');
+const Zajecia = require('../../models/zajecia.model');
+const { Sequelize } = require('sequelize');
 
 class QuizRepository {
     async findAll() {
+        require('../../models/associations');
         return await Quiz.findAll({
             order: [['id_quizu', 'DESC']]
         });
@@ -14,6 +17,19 @@ class QuizRepository {
     async findByLesson(lessonId) {
         return await Quiz.findAll({
             where: { Zajecia_id_zajec: lessonId },
+            order: [['id_quizu', 'DESC']]
+        });
+    }
+
+    async findByGroup(groupId) {
+        require('../../models/associations');
+        return await Quiz.findAll({
+            include: [{
+                model: Zajecia,
+                as: 'zajecia',
+                where: { id_grupy: groupId },
+                attributes: []
+            }],
             order: [['id_quizu', 'DESC']]
         });
     }

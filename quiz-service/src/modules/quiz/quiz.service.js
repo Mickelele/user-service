@@ -15,6 +15,10 @@ class QuizService {
         return await QuizRepository.findByLesson(lessonId);
     }
 
+    async getByGroup(groupId) {
+        return await QuizRepository.findByGroup(groupId);
+    }
+
     async create(data) {
         return await QuizRepository.create(data);
     }
