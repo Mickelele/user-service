@@ -5,6 +5,7 @@ const { sequelize } = require('./config/db');
 const quizRoutes = require('./modules/quiz/quiz.routes');
 const questionRoutes = require('./modules/question/question.routes');
 const answerRoutes = require('./modules/answer/answer.routes');
+const wynikQuizuRoutes = require('./modules/quizResult/wynikQuizu.routes');
 require('./models/associations');
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/quizy', quizRoutes);
 app.use('/pytania', questionRoutes);
 app.use('/odpowiedzi', answerRoutes);
+app.use('/wyniki-quizu', wynikQuizuRoutes);
 
 const PORT = process.env.PORT || 7000;
 

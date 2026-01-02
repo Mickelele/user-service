@@ -2,6 +2,7 @@ const Quiz = require('../modules/quiz/quiz.model');
 const Pytanie = require('../modules/question/question.model');
 const Odpowiedz = require('../modules/answer/answer.model');
 const Zajecia = require('./zajecia.model');
+const WynikQuizu = require('../modules/quizResult/wynikQuizu.model');
 
 // Quiz -> Pytanie (1:N)
 Quiz.hasMany(Pytanie, {
@@ -35,9 +36,20 @@ Quiz.belongsTo(Zajecia, {
     as: 'zajecia'
 });
 
+// Quiz -> WynikQuizu (1:N)
+Quiz.hasMany(WynikQuizu, {
+    foreignKey: 'Quiz_id_quizu',
+    as: 'wyniki'
+});
+WynikQuizu.belongsTo(Quiz, {
+    foreignKey: 'Quiz_id_quizu',
+    as: 'quiz'
+});
+
 module.exports = {
     Quiz,
     Pytanie,
     Odpowiedz,
-    Zajecia
+    Zajecia,
+    WynikQuizu
 };
