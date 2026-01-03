@@ -24,5 +24,6 @@ router.delete('/:id/zdjecie', PrizeController.deleteImage);
 router.get('/uczen/:studentId', PrizeController.getStudentPrizes);
 router.post('/redeem', PrizeController.redeemPrize);
 router.get('/history/all', PrizeController.getPrizeHistory);
+router.get('/test', PrizeController.test);
 
 module.exports = router;

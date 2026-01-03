@@ -110,6 +110,11 @@ class PrizeController {
             res.status(404).json({ error: err.message });
         }
     }
+
+
+    async test(req, res) {
+            res.status(200).json({ message: 'Test endpoint działa poprawnie' });
+    }
 }
 
 module.exports = new PrizeController();
