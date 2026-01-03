@@ -1,7 +1,7 @@
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const UczenRepository = require('./student.repository');
-const UserController = require('../users/user.controller');
+const UserService = require('../users/user.service');
 
 
 class UczenService {
@@ -58,16 +58,23 @@ class UczenService {
         let newUser;
 
         try {
-            newUser = await UserController.createUser({
+            const existing = await UserService.getUserByEmail(email);
+            if (existing) {
+                throw new Error('Email jest już zajęty');
+            }
+
+            const hashed = await bcrypt.hash(haslo, 10);
+            
+            newUser = await UserService.createUser({
                 imie,
                 nazwisko,
                 email,
-                haslo,
+                haslo: hashed,
                 rola: 'uczen'
             });
         } catch (err) {
             console.error('Błąd z user-service:', err.message);
-            throw new Error('Błąd przy tworzeniu użytkownika');
+            throw new Error(err.message || 'Błąd przy tworzeniu użytkownika');
         }
 
 
