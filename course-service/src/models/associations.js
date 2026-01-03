@@ -86,8 +86,8 @@ OdpowiedzNaZadanie.belongsTo(Uczen, {
 
 
 // ZAJĘCIA ↔ ZASTĘPSTWA
-Zajecia.hasMany(Zastepstwo, { foreignKey: 'Zajecia_id_zajec', as: 'zastepstwa' });
-Zastepstwo.belongsTo(Zajecia, { foreignKey: 'Zajecia_id_zajec', as: 'zajecia' });
+Zajecia.hasMany(Zastepstwo, { foreignKey: 'zajecia_id_zajec', as: 'zastepstwa' });
+Zastepstwo.belongsTo(Zajecia, { foreignKey: 'zajecia_id_zajec', as: 'zajecia' });
 
 
 module.exports = {

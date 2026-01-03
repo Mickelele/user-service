@@ -12,14 +12,14 @@ class SubstituteService {
     }
 
     async create(data) {
-        const { Zajecia_id_zajec, id_nauczyciela_zglaszajacego } = data;
+        const { zajecia_id_zajec, id_nauczyciela_zglaszajacego } = data;
         
-        if (!Zajecia_id_zajec || !id_nauczyciela_zglaszajacego) {
+        if (!zajecia_id_zajec || !id_nauczyciela_zglaszajacego) {
             throw new Error('Brak wymaganych danych');
         }
 
         return await SubstituteRepository.create({
-            Zajecia_id_zajec,
+            zajecia_id_zajec,
             id_nauczyciela_zglaszajacego,
             id_nauczyciel_zastepujacy: null
         });

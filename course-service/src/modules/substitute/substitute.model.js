@@ -9,7 +9,7 @@ Zastepstwo.init({
         primaryKey: true,
         autoIncrement: true
     },
-    Zajecia_id_zajec: {
+    zajecia_id_zajec: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
