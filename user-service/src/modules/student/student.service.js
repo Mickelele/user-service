@@ -1,7 +1,7 @@
 const axios = require('axios');
 const bcrypt = require('bcrypt');
 const UczenRepository = require('./student.repository');
-const UserService = require('../users/user.service');
+const UserController = require('../users/user.controller');
 
 
 class UczenService {
@@ -58,7 +58,7 @@ class UczenService {
         let newUser;
 
         try {
-            newUser = await UserService.createUser({
+            newUser = await UserController.createUser({
                 imie,
                 nazwisko,
                 email,
