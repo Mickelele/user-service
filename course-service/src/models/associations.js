@@ -8,6 +8,7 @@ const Sala = require('../modules/room/room.model');
 const Rezerwacja = require('../modules/reservation/reservation.model');
 const ZadanieDomowe = require('../modules/homework/zadanieDomowe.model');
 const OdpowiedzNaZadanie = require('../modules/homework_answer/odpowiedzNaZadanie.model');
+const Zastepstwo = require('../modules/substitute/substitute.model');
 
 //RELACJE KURS ↔ GRUPA
 Kurs.hasMany(Grupa, { foreignKey: 'Kurs_id_kursu', as: 'grupy' });
@@ -84,6 +85,9 @@ OdpowiedzNaZadanie.belongsTo(Uczen, {
 });
 
 
+// ZAJĘCIA ↔ ZASTĘPSTWA
+Zajecia.hasMany(Zastepstwo, { foreignKey: 'Zajecia_id_zajec', as: 'zastepstwa' });
+Zastepstwo.belongsTo(Zajecia, { foreignKey: 'Zajecia_id_zajec', as: 'zajecia' });
 
 
 module.exports = {
@@ -96,5 +100,6 @@ module.exports = {
     Rezerwacja,
     Sala,
     ZadanieDomowe,
-    OdpowiedzNaZadanie
+    OdpowiedzNaZadanie,
+    Zastepstwo
 };
