@@ -16,6 +16,10 @@ Nagroda.init({
     koszt: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    zdjecie: {
+        type: DataTypes.BLOB,
+        allowNull: true
     }
 }, {
     sequelize,

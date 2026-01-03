@@ -57,6 +57,31 @@ class PrizeService {
     async getPrizeHistory() {
         return await PrizeRepository.getPrizeHistory();
     }
+
+    async uploadImage(id_nagrody, imageBuffer) {
+        const nagroda = await PrizeRepository.findById(id_nagrody);
+        if (!nagroda) throw new Error('Nagroda nie znaleziona');
+
+        nagroda.zdjecie = imageBuffer;
+        await nagroda.save();
+        return { message: 'Zdjęcie zostało przesłane' };
+    }
+
+    async getImage(id_nagrody) {
+        const nagroda = await PrizeRepository.findById(id_nagrody);
+        if (!nagroda) throw new Error('Nagroda nie znaleziona');
+        if (!nagroda.zdjecie) throw new Error('Nagroda nie ma zdjęcia');
+        return nagroda.zdjecie;
+    }
+
+    async deleteImage(id_nagrody) {
+        const nagroda = await PrizeRepository.findById(id_nagrody);
+        if (!nagroda) throw new Error('Nagroda nie znaleziona');
+        
+        nagroda.zdjecie = null;
+        await nagroda.save();
+        return { message: 'Zdjęcie zostało usunięte' };
+    }
 }
 
 module.exports = new PrizeService();

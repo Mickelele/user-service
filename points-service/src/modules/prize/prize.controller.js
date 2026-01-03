@@ -73,6 +73,43 @@ class PrizeController {
             res.status(500).json({ error: err.message });
         }
     }
+
+    async uploadImage(req, res) {
+        try {
+            const { id } = req.params;
+            
+            if (!req.file) {
+                return res.status(400).json({ error: 'Brak pliku' });
+            }
+
+            const result = await PrizeService.uploadImage(id, req.file.buffer);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    }
+
+    async getImage(req, res) {
+        try {
+            const { id } = req.params;
+            const imageBuffer = await PrizeService.getImage(id);
+            
+            res.set('Content-Type', 'image/jpeg');
+            res.send(imageBuffer);
+        } catch (err) {
+            res.status(404).json({ error: err.message });
+        }
+    }
+
+    async deleteImage(req, res) {
+        try {
+            const { id } = req.params;
+            const result = await PrizeService.deleteImage(id);
+            res.json(result);
+        } catch (err) {
+            res.status(404).json({ error: err.message });
+        }
+    }
 }
 
 module.exports = new PrizeController();
