@@ -11,6 +11,9 @@ const upload = multer({
     }
 });
 
+router.get('/test', PrizeController.test);
+router.get('/history/all', PrizeController.getPrizeHistory);
+
 router.get('/', PrizeController.getAll);
 router.get('/:id', PrizeController.getOne);
 router.post('/', PrizeController.create);
@@ -23,7 +26,5 @@ router.delete('/:id/zdjecie', PrizeController.deleteImage);
 
 router.get('/uczen/:studentId', PrizeController.getStudentPrizes);
 router.post('/redeem', PrizeController.redeemPrize);
-router.get('/history/all', PrizeController.getPrizeHistory);
-router.get('/test', PrizeController.test);
 
 module.exports = router;
