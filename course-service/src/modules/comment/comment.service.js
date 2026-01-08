@@ -23,6 +23,10 @@ class CommentService {
     async delete(id) {
         return await UwagaRepository.delete(id);
     }
+
+    async getByStudentId(id_ucznia) {
+        return await UwagaRepository.findByStudentId(id_ucznia);
+    }
 }
 
 module.exports = new CommentService();

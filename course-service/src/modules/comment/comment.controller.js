@@ -46,6 +46,15 @@ const CommentController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async getByStudentId(req, res) {
+        try {
+            const uwagi = await UwagaService.getByStudentId(req.params.id_ucznia);
+            res.json(uwagi);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
 };
 

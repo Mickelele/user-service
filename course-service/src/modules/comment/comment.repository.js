@@ -1,4 +1,7 @@
 const Uwaga = require('./comment.model');
+const Zajecia = require('../lesson/lesson.model');
+const Nauczyciel = require('../course/teacher.model');
+const Grupa = require('../group/group.model');
 
 const CommentRepository = {
     async findAll() {
@@ -7,6 +10,29 @@ const CommentRepository = {
 
     async findById(id) {
         return await Uwaga.findByPk(id);
+    },
+
+    async findByStudentId(id_ucznia) {
+        return await Uwaga.findAll({
+            where: { id_ucznia },
+            include: [
+                {
+                    model: Zajecia,
+                    as: 'zajecia',
+                    include: [
+                        {
+                            model: Grupa,
+                            as: 'grupa'
+                        }
+                    ]
+                },
+                {
+                    model: Nauczyciel,
+                    as: 'nauczyciel'
+                }
+            ],
+            order: [['data', 'DESC']]
+        });
     },
 
     async create(data) {
