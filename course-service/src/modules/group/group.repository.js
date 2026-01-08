@@ -17,14 +17,15 @@ const GroupRepository = {
 
     async updateCourse(id, data) {
         const course = await Grupa.findByPk(id);
-        if (!course) throw new Error('Grupa nie znaleziony');
-        return Grupa.update(data);
+        if (!course) throw new Error('Grupa nie znaleziona');
+        return await course.update(data);
     },
 
     async deleteCourse(id) {
         const course = await Grupa.findByPk(id);
-        if (!course) throw new Error('Grupa nie znaleziony');
-        return Grupa.destroy();
+        if (!course) throw new Error('Grupa nie znaleziona');
+        await course.destroy();
+        return { message: 'Usunięto grupę' };
     },
 
     async getStudents(id_grupa) {
