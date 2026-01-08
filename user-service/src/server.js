@@ -8,6 +8,7 @@ const guardianRouter = require('./modules/guardian/guardian.routes');
 const studentRouter = require('./modules/student/student.routes');
 const statusRouter = require('./modules/status/status.routes');
 const todoRouter = require('./modules/todo/todo.routes');
+const adminRouter = require('./modules/admin/admin.routes');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/opiekunowie', guardianRouter);
 app.use('/uczniowie', studentRouter);
 app.use('/status', statusRouter);
 app.use('/todo', todoRouter);
+app.use('/administratorzy', adminRouter);
 
 const PORT = process.env.PORT || 3000;
 
