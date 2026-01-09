@@ -32,7 +32,22 @@ const CourseRepository = {
     async deleteCourse(id) {
         const course = await Kurs.findByPk(id);
         if (!course) throw new Error('Kurs nie znaleziony');
-        return course.destroy();
+        
+        // Pobierz wszystkie grupy przypisane do kursu
+        const grupy = await Grupa.findAll({
+            where: { Kurs_id_kursu: id }
+        });
+        
+        // Usuń zajęcia dla każdej grupy, a następnie samą grupę
+        for (const grupa of grupy) {
+            await Zajecia.destroy({
+                where: { id_grupy: grupa.id_grupa }
+            });
+            await grupa.destroy();
+        }
+        
+        await course.destroy();
+        return { message: 'Usunięto kurs wraz ze wszystkimi grupami i zajęciami' };
     },
 
     async findGroupsByCourseId(id) {
