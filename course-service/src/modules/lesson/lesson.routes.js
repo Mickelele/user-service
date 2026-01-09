@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const LessonController = require('./lesson.controller');
 
+router.get('/technical-reports', LessonController.getTechnicalReports);
+router.delete('/technical-reports/:id', LessonController.clearTechnicalReport);
+
 router.get('/:groupId/zajecia', LessonController.getAllForGroup);
 router.post('/:groupId/zajecia/dodaj', LessonController.create);
 

@@ -1,5 +1,6 @@
 const Zajecia = require('./lesson.model');
 const Grupa = require('../group/group.model');
+const Sala = require('../room/room.model');
 const { Op } = require('sequelize');
 
 const LessonRepository = {
@@ -50,6 +51,35 @@ const LessonRepository = {
             ...l.toJSON(),
             godzina: l.grupa.godzina
         }));
+    },
+
+    async findTechnicalReports() {
+        return await Zajecia.findAll({
+            where: {
+                uwaga_do_sprzetu: {
+                    [Op.ne]: null,
+                    [Op.ne]: ''
+                }
+            },
+            include: [
+                {
+                    model: Sala,
+                    as: 'sala'
+                },
+                {
+                    model: Grupa,
+                    as: 'grupa'
+                }
+            ],
+            order: [['data', 'DESC']]
+        });
+    },
+
+    async clearTechnicalReport(id) {
+        const zaj = await Zajecia.findByPk(id);
+        if (!zaj) throw new Error('Zajęcia nie znalezione');
+        await zaj.update({ uwaga_do_sprzetu: null });
+        return zaj;
     }
 };
 

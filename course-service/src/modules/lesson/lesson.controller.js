@@ -100,6 +100,26 @@ const LessonController = {
         }
     },
 
+    async getTechnicalReports(req, res) {
+        try {
+            const reports = await LessonService.getTechnicalReports();
+            res.json(reports);
+        } catch (err) {
+            console.error(err);
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+    async clearTechnicalReport(req, res) {
+        try {
+            const updated = await LessonService.clearTechnicalReport(req.params.id);
+            res.json(updated);
+        } catch (err) {
+            console.error(err);
+            res.status(400).json({ error: err.message });
+        }
+    }
+
 };
 
 module.exports = LessonController;

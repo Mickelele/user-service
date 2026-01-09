@@ -29,6 +29,14 @@ class LessonService {
         return LessonRepository.findByTeacherAndMonth(teacherId, year, month);
     }
 
+    async getTechnicalReports() {
+        return await LessonRepository.findTechnicalReports();
+    }
+
+    async clearTechnicalReport(id) {
+        return await LessonRepository.clearTechnicalReport(id);
+    }
+
     async createLessonsForGroup(id_grupa) {
         try {
             const grupa = await Grupa.findByPk(id_grupa, {
