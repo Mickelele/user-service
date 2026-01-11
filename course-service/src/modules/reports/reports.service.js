@@ -7,11 +7,11 @@ const Grupa = require('../group/group.model');
 const Uczen = require('../group/student.model');
 const { Op } = require('sequelize');
 
-const QUIZ_SERVICE_URL = process.env.QUIZ_SERVICE_URL || 'http://localhost:5002';
+const QUIZ_SERVICE_URL = process.env.QUIZ_SERVICE_URL || 'http://localhost:7000';
 const POINTS_SERVICE_URL = process.env.POINTS_SERVICE_URL || 'http://localhost:5001';
 
 class ReportsService {
-    async getDetailedReport(groupId, studentId) {
+    async getDetailedReport(groupId, studentId, token) {
         try {
             const report = {
                 summary: {},
@@ -24,6 +24,7 @@ class ReportsService {
             const filters = {};
             if (groupId) filters.groupId = parseInt(groupId);
             if (studentId) filters.studentId = parseInt(studentId);
+            if (token) filters.token = token;
 
            
             report.attendance = await this.getAttendanceStats(filters);
@@ -172,51 +173,92 @@ class ReportsService {
 
     async getQuizStats(filters) {
         try {
-            // Pobierz zajęcia dla grupy
-            let zajeciaIds = [];
+            let wyniki = [];
+            let wynikiZProcentami = [];
+
             if (filters.groupId) {
                 const zajecia = await Zajecia.findAll({
                     where: { id_grupy: filters.groupId },
                     attributes: ['id_zajec']
                 });
-                zajeciaIds = zajecia.map(z => z.id_zajec);
-            }
+                const zajeciaIds = zajecia.map(z => z.id_zajec);
 
-            let url = `${QUIZ_SERVICE_URL}/quizy`;
-            
-            if (filters.studentId) {
-                url = `${QUIZ_SERVICE_URL}/wyniki/uczen/${filters.studentId}`;
-            }
-
-            const response = await axios.get(url);
-            let data = response.data || [];
-
-            let wyniki = [];
-
-            if (filters.studentId) {
-                // Dla studenta - filtruj wyniki
-                wyniki = data;
-                if (filters.groupId && zajeciaIds.length > 0) {
-                    wyniki = wyniki.filter(w => w.Quiz && zajeciaIds.includes(w.Quiz.id_zajec));
-                }
-            } else {
-                // Dla grupy - pobierz quizy i ich wyniki
-                let quizy = data;
-                if (filters.groupId && zajeciaIds.length > 0) {
-                    quizy = quizy.filter(q => zajeciaIds.includes(q.id_zajec));
+                if (zajeciaIds.length === 0) {
+                    return { totalQuizzes: 0, averageScore: 0, scoreDistribution: {} };
                 }
 
-                // Pobierz wszystkie wyniki dla tych quizów
-                const quizIds = quizy.map(q => q.id_quizu);
-                if (quizIds.length > 0) {
-                    const wynikiResponse = await axios.get(`${QUIZ_SERVICE_URL}/wyniki`);
-                    wyniki = (wynikiResponse.data || []).filter(w => quizIds.includes(w.id_quizu));
+                const headers = filters.token ? { Authorization: filters.token } : {};
+                const quizyResponse = await axios.get(`${QUIZ_SERVICE_URL}/quizy`, { headers });
+                const allQuizy = quizyResponse.data || [];
+
+                const quizyGrupy = allQuizy.filter(q => zajeciaIds.includes(q.Zajecia_id_zajec));
+                const quizIds = quizyGrupy.map(q => q.id_quizu);
+
+                if (quizIds.length === 0) {
+                    return { totalQuizzes: 0, averageScore: 0, scoreDistribution: {} };
                 }
+
+                const wynikiResponse = await axios.get(`${QUIZ_SERVICE_URL}/wyniki-quizu`, { headers });
+                const allWyniki = wynikiResponse.data || [];
+                wyniki = allWyniki.filter(w => quizIds.includes(w.Quiz_id_quizu));
+
+                const quizyZMaxPunktami = await Promise.all(
+                    quizyGrupy.map(async (quiz) => {
+                        try {
+                            const pytaniaResponse = await axios.get(`${QUIZ_SERVICE_URL}/pytania/quiz/${quiz.id_quizu}`, { headers });
+                            const pytania = pytaniaResponse.data || [];
+                            const maxPunkty = pytania.reduce((sum, p) => sum + (parseFloat(p.ilosc_punktow) || 0), 0);
+                            return { ...quiz, maxPunkty };
+                        } catch (err) {
+                            console.error(`Błąd pobierania pytań dla quizu ${quiz.id_quizu}:`, err.message);
+                            return { ...quiz, maxPunkty: 0 };
+                        }
+                    })
+                );
+
+                if (filters.studentId) {
+                    wyniki = wyniki.filter(w => w.Uczen_id_ucznia === filters.studentId);
+                }
+
+                wynikiZProcentami = wyniki.map(w => {
+                    const quiz = quizyZMaxPunktami.find(q => q.id_quizu === w.Quiz_id_quizu);
+                    const maxPunkty = quiz?.maxPunkty || 0;
+                    const procent = maxPunkty > 0 ? (parseFloat(w.wynik) / maxPunkty * 100) : 0;
+                    return { ...w, procent, maxPunkty };
+                });
+
+            } else if (filters.studentId) {
+                const headers = filters.token ? { Authorization: filters.token } : {};
+                const wynikiResponse = await axios.get(`${QUIZ_SERVICE_URL}/wyniki-quizu/uczen/${filters.studentId}`, { headers });
+                wyniki = wynikiResponse.data || [];
+
+                const quizIds = [...new Set(wyniki.map(w => w.Quiz_id_quizu))];
+                
+                const quizyZMaxPunktami = await Promise.all(
+                    quizIds.map(async (quizId) => {
+                        try {
+                            const pytaniaResponse = await axios.get(`${QUIZ_SERVICE_URL}/pytania/quiz/${quizId}`, { headers });
+                            const pytania = pytaniaResponse.data || [];
+                            const maxPunkty = pytania.reduce((sum, p) => sum + (parseFloat(p.ilosc_punktow) || 0), 0);
+                            return { id_quizu: quizId, maxPunkty };
+                        } catch (err) {
+                            console.error(`Błąd pobierania pytań dla quizu ${quizId}:`, err.message);
+                            return { id_quizu: quizId, maxPunkty: 0 };
+                        }
+                    })
+                );
+
+                wynikiZProcentami = wyniki.map(w => {
+                    const quiz = quizyZMaxPunktami.find(q => q.id_quizu === w.Quiz_id_quizu);
+                    const maxPunkty = quiz?.maxPunkty || 0;
+                    const procent = maxPunkty > 0 ? (parseFloat(w.wynik) / maxPunkty * 100) : 0;
+                    return { ...w, procent, maxPunkty };
+                });
             }
 
-            const totalQuizzes = wyniki.length;
-            const totalScore = wyniki.reduce((sum, w) => sum + parseFloat(w.wynik || 0), 0);
-            const averageScore = totalQuizzes > 0 ? (totalScore / totalQuizzes).toFixed(2) : 0;
+            const totalQuizzes = wynikiZProcentami.length;
+            const totalPercent = wynikiZProcentami.reduce((sum, w) => sum + w.procent, 0);
+            const averageScore = totalQuizzes > 0 ? (totalPercent / totalQuizzes).toFixed(2) : 0;
 
             const scoreDistribution = {
                 '0-20': 0,
@@ -226,8 +268,8 @@ class ReportsService {
                 '81-100': 0
             };
 
-            wyniki.forEach(w => {
-                const score = parseFloat(w.wynik || 0);
+            wynikiZProcentami.forEach(w => {
+                const score = w.procent;
                 if (score <= 20) scoreDistribution['0-20']++;
                 else if (score <= 40) scoreDistribution['21-40']++;
                 else if (score <= 60) scoreDistribution['41-60']++;

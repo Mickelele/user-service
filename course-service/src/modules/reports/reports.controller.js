@@ -4,7 +4,8 @@ const ReportsController = {
     async getDetailedReport(req, res) {
         try {
             const { groupId, studentId } = req.query;
-            const report = await ReportsService.getDetailedReport(groupId, studentId);
+            const token = req.headers.authorization;
+            const report = await ReportsService.getDetailedReport(groupId, studentId, token);
             res.json(report);
         } catch (err) {
             console.error(err);
