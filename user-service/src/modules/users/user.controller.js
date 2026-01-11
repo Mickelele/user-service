@@ -81,19 +81,6 @@ const UserController = {
         }
     },
 
-    async getUserByIdInternal(req, res) {
-        try {
-            const { id } = req.params;
-            const user = await UserService.getUserById(id);
-            if (!user) return res.status(404).json({ error: 'Użytkownik nie znaleziony' });
-            // Zwraca całego użytkownika z hasłem dla internal use (auth-service)
-            res.json(user);
-        } catch (err) {
-            console.error('Błąd przy pobieraniu użytkownika po ID (internal):', err);
-            res.status(500).json({ error: err.message });
-        }
-    },
-
 
 
     async createUser(req, res) {

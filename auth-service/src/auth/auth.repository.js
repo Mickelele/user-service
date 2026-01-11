@@ -8,11 +8,6 @@ const AuthRepository = {
         return res.data;
     },
 
-    async findById(userId) {
-        const res = await axios.get(`${USER_SERVICE_URL}/user/internal/${userId}`);
-        return res.data;
-    },
-
     async createUser(data) {
         const userRes = await axios.post(`${USER_SERVICE_URL}/user`, data);
 

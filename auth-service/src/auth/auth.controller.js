@@ -67,18 +67,6 @@ const AuthController = {
             console.error('Błąd przy resetowaniu hasła:', err);
             res.status(400).json({ error: err.message });
         }
-    },
-
-    async changePassword(req, res) {
-        try {
-            const userId = req.user.id;
-            const { currentPassword, newPassword } = req.body;
-            const result = await AuthService.changePassword(userId, currentPassword, newPassword);
-            res.status(200).json(result);
-        } catch (err) {
-            console.error('Błąd przy zmianie hasła:', err);
-            res.status(400).json({ error: err.message });
-        }
     }
 };
 

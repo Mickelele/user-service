@@ -15,7 +15,6 @@ router.put('/updateProfile', authMiddleware, UserController.updateProfile);
 router.put('/:id', UserController.changeData);
 router.put('/profile/password', authMiddleware, UserController.changePassword);
 router.get('/reset-token/:token', UserController.getUserByResetToken);
-router.get('/internal/:id', UserController.getUserByIdInternal);
 router.get('/:id', UserController.getUserById);
 
 
