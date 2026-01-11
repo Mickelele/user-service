@@ -45,6 +45,19 @@ const PresenceRepository = {
                 }
             ]
         });
+    },
+
+    async findByGroupId(id_grupy) {
+        return Obecnosc.findAll({
+            include: [
+                {
+                    model: Zajecia,
+                    as: 'zajecia',
+                    where: { id_grupy },
+                    attributes: ['id_zajec', 'tematZajec', 'data', 'id_grupy']
+                }
+            ]
+        });
     }
 
 };

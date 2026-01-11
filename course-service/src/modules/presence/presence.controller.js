@@ -68,6 +68,15 @@ const PresenceController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async getByGroupId(req, res) {
+        try {
+            const presences = await PresenceService.getByGroupId(req.params.id_grupy);
+            res.json(presences);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
 
 

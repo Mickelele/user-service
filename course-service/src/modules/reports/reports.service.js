@@ -17,8 +17,7 @@ class ReportsService {
                 summary: {},
                 homework: {},
                 quiz: {},
-                attendance: {},
-                prizes: {}
+                attendance: {}
             };
 
             
@@ -36,14 +35,10 @@ class ReportsService {
             report.quiz = await this.getQuizStats(filters);
 
             
-            report.prizes = await this.getPrizesStats(filters);
-
-            
             report.summary = {
                 totalLessons: report.attendance.totalLessons || 0,
                 totalHomeworks: report.homework.totalHomeworks || 0,
                 totalQuizzes: report.quiz.totalQuizzes || 0,
-                totalPrizes: report.prizes.totalPrizes || 0,
                 averageAttendance: report.attendance.attendancePercentage || 0,
                 averageHomeworkGrade: report.homework.averageGrade || 0,
                 averageQuizScore: report.quiz.averageScore || 0
@@ -59,12 +54,14 @@ class ReportsService {
     async getAttendanceStats(filters) {
         try {
             const whereClause = {};
+            let totalLessons = 0;
             
             if (filters.groupId) {
                 const zajecia = await Zajecia.findAll({
                     where: { id_grupy: filters.groupId },
                     attributes: ['id_zajec']
                 });
+                totalLessons = zajecia.length;
                 const zajeciaIds = zajecia.map(z => z.id_zajec);
                 whereClause.id_zajec = { [Op.in]: zajeciaIds };
             }
@@ -84,32 +81,30 @@ class ReportsService {
                 ]
             });
 
-            const totalLessons = filters.studentId 
-                ? obecnosci.length 
-                : await Zajecia.count({ where: filters.groupId ? { id_grupy: filters.groupId } : {} });
+            if (filters.studentId && !filters.groupId) {
+                totalLessons = obecnosci.length;
+            }
 
-            const present = obecnosci.filter(o => o.status === 'obecny').length;
-            const absent = obecnosci.filter(o => o.status === 'nieobecny').length;
-            const late = obecnosci.filter(o => o.status === 'spóźniony').length;
-            const excused = obecnosci.filter(o => o.status === 'nieobecny usprawiedliwiony').length;
+            const present = obecnosci.filter(o => o.czyObecny === 1).length;
+            const absent = obecnosci.filter(o => o.czyObecny === 0).length;
+            const unknown = obecnosci.filter(o => o.czyObecny === null).length;
 
             return {
                 totalLessons,
+                totalRecords: obecnosci.length,
                 present,
                 absent,
-                late,
-                excused,
-                attendancePercentage: totalLessons > 0 ? ((present / totalLessons) * 100).toFixed(2) : 0,
+                unknown,
+                attendancePercentage: obecnosci.length > 0 ? ((present / obecnosci.length) * 100).toFixed(2) : 0,
                 byStatus: {
                     obecny: present,
                     nieobecny: absent,
-                    spóźniony: late,
-                    'nieobecny usprawiedliwiony': excused
+                    nieznany: unknown
                 }
             };
         } catch (error) {
             console.error('Błąd statystyk obecności:', error);
-            return { totalLessons: 0, present: 0, absent: 0, late: 0, excused: 0, attendancePercentage: 0 };
+            return { totalLessons: 0, totalRecords: 0, present: 0, absent: 0, unknown: 0, attendancePercentage: 0 };
         }
     }
 
@@ -177,19 +172,46 @@ class ReportsService {
 
     async getQuizStats(filters) {
         try {
-            let url = `${QUIZ_SERVICE_URL}/wyniki`;
-            const params = [];
+            // Pobierz zajęcia dla grupy
+            let zajeciaIds = [];
+            if (filters.groupId) {
+                const zajecia = await Zajecia.findAll({
+                    where: { id_grupy: filters.groupId },
+                    attributes: ['id_zajec']
+                });
+                zajeciaIds = zajecia.map(z => z.id_zajec);
+            }
 
+            let url = `${QUIZ_SERVICE_URL}/quizy`;
+            
             if (filters.studentId) {
                 url = `${QUIZ_SERVICE_URL}/wyniki/uczen/${filters.studentId}`;
             }
 
             const response = await axios.get(url);
-            let wyniki = response.data || [];
+            let data = response.data || [];
 
-            
-            if (filters.groupId && wyniki.length > 0) {
-                wyniki = wyniki.filter(w => w.Quiz && w.Quiz.id_grupy === filters.groupId);
+            let wyniki = [];
+
+            if (filters.studentId) {
+                // Dla studenta - filtruj wyniki
+                wyniki = data;
+                if (filters.groupId && zajeciaIds.length > 0) {
+                    wyniki = wyniki.filter(w => w.Quiz && zajeciaIds.includes(w.Quiz.id_zajec));
+                }
+            } else {
+                // Dla grupy - pobierz quizy i ich wyniki
+                let quizy = data;
+                if (filters.groupId && zajeciaIds.length > 0) {
+                    quizy = quizy.filter(q => zajeciaIds.includes(q.id_zajec));
+                }
+
+                // Pobierz wszystkie wyniki dla tych quizów
+                const quizIds = quizy.map(q => q.id_quizu);
+                if (quizIds.length > 0) {
+                    const wynikiResponse = await axios.get(`${QUIZ_SERVICE_URL}/wyniki`);
+                    wyniki = (wynikiResponse.data || []).filter(w => quizIds.includes(w.id_quizu));
+                }
             }
 
             const totalQuizzes = wyniki.length;
@@ -221,36 +243,6 @@ class ReportsService {
         } catch (error) {
             console.error('Błąd pobierania statystyk quizów:', error.message);
             return { totalQuizzes: 0, averageScore: 0, scoreDistribution: {} };
-        }
-    }
-
-    async getPrizesStats(filters) {
-        try {
-            if (!filters.studentId) {
-                
-                const response = await axios.get(`${POINTS_SERVICE_URL}/nagrody/history/all`);
-                const prizes = response.data || [];
-
-                return {
-                    totalPrizes: prizes.length,
-                    totalPointsSpent: prizes.reduce((sum, p) => sum + (p.koszt || 0), 0),
-                    prizesList: prizes.slice(0, 10) 
-                };
-            }
-
-            const response = await axios.get(`${POINTS_SERVICE_URL}/nagrody/uczen/${filters.studentId}`);
-            const prizes = response.data || [];
-
-            const totalPointsSpent = prizes.reduce((sum, p) => sum + (p.koszt || 0), 0);
-
-            return {
-                totalPrizes: prizes.length,
-                totalPointsSpent,
-                prizesList: prizes
-            };
-        } catch (error) {
-            console.error('Błąd pobierania statystyk nagród:', error.message);
-            return { totalPrizes: 0, totalPointsSpent: 0, prizesList: [] };
         }
     }
 }

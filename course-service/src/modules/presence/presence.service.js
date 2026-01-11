@@ -40,6 +40,10 @@ class PresenceService {
         return PresenceRepository.update(id, { czyObecny: normalized });
     }
 
+    async getByGroupId(id_grupy) {
+        return PresenceRepository.findByGroupId(id_grupy);
+    }
+
 
 }
 
