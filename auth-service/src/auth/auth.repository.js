@@ -9,7 +9,7 @@ const AuthRepository = {
     },
 
     async findById(userId) {
-        const res = await axios.get(`${USER_SERVICE_URL}/user/${userId}`);
+        const res = await axios.get(`${USER_SERVICE_URL}/user/internal/${userId}`);
         return res.data;
     },
 
