@@ -3,6 +3,15 @@ const USER_SERVICE_URL = process.env.USER_SERVICE_URL;
 const axios = require('axios');
 
 const HomeworkAnswerController = {
+    async getAll(req, res) {
+        try {
+            const odpowiedzi = await HomeworkAnswerService.getAll();
+            res.status(200).json(odpowiedzi);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
     async create(req, res) {
         try {
             const id_ucznia = req.user.id;

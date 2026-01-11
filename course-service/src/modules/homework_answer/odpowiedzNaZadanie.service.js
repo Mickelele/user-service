@@ -3,6 +3,11 @@ const axios = require('axios');
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL;
 
 class HomeworkAnswerService {
+    async getAll() {
+        const odpowiedzi = await HomeworkAnswerRepository.findAll();
+        return await this._attachUserData(odpowiedzi);
+    }
+
     async addAnswer(data) {
         if (!data.id_zadania || !data.id_ucznia || !data.tresc) {
             throw new Error("Brak wymaganych pól: id_zadania, id_ucznia, tresc");

@@ -1,6 +1,12 @@
 const OdpowiedzNaZadanie = require('./odpowiedzNaZadanie.model');
 
 const HomeworkAnswerRepository = {
+    async findAll() {
+        return await OdpowiedzNaZadanie.findAll({
+            order: [['id_odpowiedzi', 'DESC']]
+        });
+    },
+
     async createAnswer(data) {
         return await OdpowiedzNaZadanie.create(data);
     },
