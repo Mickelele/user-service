@@ -141,6 +141,35 @@ class AuthService {
 
         return { message: 'Hasło zostało zresetowane pomyślnie' };
     }
+
+    async changePassword(userId, currentPassword, newPassword) {
+        if (!currentPassword || !newPassword) {
+            throw new Error('Obecne hasło i nowe hasło są wymagane');
+        }
+
+        if (newPassword.length < 6) {
+            throw new Error('Nowe hasło musi mieć minimum 6 znaków');
+        }
+
+        const user = await AuthRepository.findById(userId);
+        if (!user) {
+            throw new Error('Użytkownik nie znaleziony');
+        }
+
+        if (!user.haslo) {
+            throw new Error('Użytkownik nie ma ustawionego hasła');
+        }
+
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.haslo);
+        if (!isPasswordValid) {
+            throw new Error('Obecne hasło jest nieprawidłowe');
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await AuthRepository.updatePassword(user.id_uzytkownika, hashedPassword);
+
+        return { message: 'Hasło zostało zmienione pomyślnie' };
+    }
 }
 
 module.exports = new AuthService();

@@ -12,6 +12,7 @@ const commentRoutes = require('./modules/comment/comment.routes');
 const homeworkRoutes = require('./modules/homework/zadanieDomowe.routes');
 const homeworkAnswerRoutes = require('./modules/homework_answer/odpowiedzNaZadanie.routes');
 const substituteRoutes = require('./modules/substitute/substitute.routes');
+const reportsRoutes = require('./modules/reports/reports.routes');
 const { initModels } = require('./models');
 
 const app = express();
@@ -35,6 +36,7 @@ app.use('/uwagi', commentRoutes);
 app.use('/zadania', homeworkRoutes);
 app.use('/odpowiedzi', homeworkAnswerRoutes);
 app.use('/zastepstwa', substituteRoutes);
+app.use('/raporty', reportsRoutes);
 
 
 const PORT = process.env.PORT || 3000;
