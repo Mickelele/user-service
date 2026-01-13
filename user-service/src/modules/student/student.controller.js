@@ -84,6 +84,23 @@ const UczenController = {
             console.error('Błąd przy przypisywaniu opiekuna:', err);
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async adjustPoints(req, res) {
+        try {
+            const { id } = req.params;
+            const { delta } = req.body;
+            
+            if (delta === undefined || isNaN(delta)) {
+                return res.status(400).json({ error: 'Delta musi być liczbą' });
+            }
+            
+            const updated = await UczenService.adjustPoints(id, parseInt(delta));
+            res.json(updated);
+        } catch (err) {
+            console.error('Błąd przy dostosowywaniu punktów:', err);
+            res.status(400).json({ error: err.message });
+        }
     }
 };
 

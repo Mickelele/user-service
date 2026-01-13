@@ -110,6 +110,10 @@ class UczenService {
         const updated = await UczenRepository.assignGuardian(uczenId, opiekunId);
         return updated;
     }
+
+    async adjustPoints(id, delta) {
+        return await UczenRepository.adjustPoints(id, delta);
+    }
 }
 
 module.exports = new UczenService();
