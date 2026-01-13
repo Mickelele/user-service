@@ -139,6 +139,17 @@ const UserController = {
         }
     },
 
+    async deleteUser(req, res) {
+        try {
+            const { id } = req.params;
+            const result = await UserService.deleteUser(id);
+            res.json(result);
+        } catch (err) {
+            console.error('Błąd przy usuwaniu użytkownika:', err);
+            res.status(400).json({ error: err.message });
+        }
+    },
+
     async test(req, res) {
         try {
             return res.status(200).json({

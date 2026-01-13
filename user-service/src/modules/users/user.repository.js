@@ -37,6 +37,13 @@ const UserRepository = {
             where: { reset_token: token },
             attributes: ['id_uzytkownika', 'email', 'reset_token', 'reset_token_expire_time']
         });
+    },
+
+    async deleteUser(id) {
+        const user = await User.findByPk(id);
+        if (!user) throw new Error('Użytkownik nie znaleziony');
+        await user.destroy();
+        return { message: 'Użytkownik został usunięty' };
     }
 };
 

@@ -20,5 +20,6 @@ router.get('/:id', UserController.getUserById);
 
 router.get('/email/:email', UserController.getUserByEmail);
 router.post('/', UserController.createUser);
+router.delete('/:id', authMiddleware, UserController.deleteUser);
 
 module.exports = router;

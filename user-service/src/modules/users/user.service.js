@@ -91,6 +91,10 @@ class UserService {
         if (!user) throw new Error('Nie znaleziono użytkownika z tym tokenem');
         return user;
     }
+
+    async deleteUser(id) {
+        return await UserRepository.deleteUser(id);
+    }
 }
 
 module.exports = new UserService();
