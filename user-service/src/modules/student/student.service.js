@@ -88,12 +88,11 @@ class UczenService {
 
 
         try {
-            await axios.post(`${this.courseServiceUrl}/groups/${id_grupa}/adjust-student-count`, {
+            await axios.patch(`${this.courseServiceUrl}/grupy/${id_grupa}/adjust`, {
                 delta: 1
             });
         } catch (err) {
-            console.error('Błąd w course-service:', err.response?.status, err.response?.data);
-
+            console.error('Błąd zwiększania liczby uczniów w grupie:', err.response?.data || err.message);
         }
 
         return newStudent;
