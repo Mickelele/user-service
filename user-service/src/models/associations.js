@@ -50,7 +50,7 @@ User.hasOne(Opiekun, {
     as: 'opiekun'
 });
 
-// Historia statusów - związki
+
 HistoriaStatusow.belongsTo(User, {
     foreignKey: 'id_uzytkownik',
     as: 'uzytkownik'
