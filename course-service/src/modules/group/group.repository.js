@@ -26,7 +26,7 @@ const GroupRepository = {
         const course = await Grupa.findByPk(id);
         if (!course) throw new Error('Grupa nie znaleziona');
         
-        
+        // Usuń wszystkie zajęcia powiązane z grupą
         await Zajecia.destroy({
             where: { id_grupy: id }
         });

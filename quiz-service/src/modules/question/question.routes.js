@@ -2,14 +2,13 @@ const express = require('express');
 const router = express.Router();
 const QuestionController = require('./question.controller');
 const authMiddleware = require('../../middleware/authMiddleware');
-const { checkRole } = require('../../middleware/roleMiddleware');
 
-router.get('/', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), QuestionController.getAll);
+router.get('/', authMiddleware, QuestionController.getAll);
 router.get('/test', QuestionController.test);
-router.get('/quiz/:quizId', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), QuestionController.getByQuiz);
-router.get('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), QuestionController.getOne);
-router.post('/', authMiddleware, checkRole(['administrator', 'nauczyciel']), QuestionController.create);
-router.put('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), QuestionController.update);
-router.delete('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), QuestionController.delete);
+router.get('/quiz/:quizId', authMiddleware, QuestionController.getByQuiz);
+router.get('/:id', authMiddleware, QuestionController.getOne);
+router.post('/', authMiddleware, QuestionController.create);
+router.put('/:id', authMiddleware, QuestionController.update);
+router.delete('/:id', authMiddleware, QuestionController.delete);
 
 module.exports = router;

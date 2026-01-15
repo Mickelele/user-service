@@ -86,16 +86,19 @@ OdpowiedzNaZadanie.belongsTo(Uczen, {
 });
 
 
-
+// ZAJĘCIA ↔ ZASTĘPSTWA
 Zajecia.hasMany(Zastepstwo, { foreignKey: 'zajecia_id_zajec', as: 'zastepstwa' });
 Zastepstwo.belongsTo(Zajecia, { foreignKey: 'zajecia_id_zajec', as: 'zajecia' });
 
+// UWAGA ↔ ZAJĘCIA
 Zajecia.hasMany(Uwaga, { foreignKey: 'id_zajec', as: 'uwagi' });
 Uwaga.belongsTo(Zajecia, { foreignKey: 'id_zajec', as: 'zajecia' });
 
+// UWAGA ↔ NAUCZYCIEL
 Nauczyciel.hasMany(Uwaga, { foreignKey: 'id_nauczyciela', as: 'uwagi' });
 Uwaga.belongsTo(Nauczyciel, { foreignKey: 'id_nauczyciela', as: 'nauczyciel' });
 
+// UWAGA ↔ UCZEŃ
 Uczen.hasMany(Uwaga, { foreignKey: 'id_ucznia', as: 'uwagi' });
 Uwaga.belongsTo(Uczen, { foreignKey: 'id_ucznia', as: 'uczen' });
 

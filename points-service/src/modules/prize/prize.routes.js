@@ -3,7 +3,6 @@ const router = express.Router();
 const multer = require('multer');
 const PrizeController = require('./prize.controller');
 const authMiddleware = require('../../middleware/authMiddleware');
-const { checkRole, checkOwnershipOrRole } = require('../../middleware/roleMiddleware');
 
 const upload = multer({ 
     storage: multer.memoryStorage(),
@@ -13,19 +12,19 @@ const upload = multer({
 });
 
 router.get('/test', PrizeController.test);
-router.get('/history/all', authMiddleware, checkRole(['administrator', 'nauczyciel']), PrizeController.getPrizeHistory);
+router.get('/history/all', PrizeController.getPrizeHistory);
 
-router.get('/', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), PrizeController.getAll);
-router.get('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), PrizeController.getOne);
-router.post('/', authMiddleware, checkRole(['administrator', 'nauczyciel']), PrizeController.create);
-router.put('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), PrizeController.update);
-router.delete('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), PrizeController.delete);
+router.get('/', PrizeController.getAll);
+router.get('/:id', PrizeController.getOne);
+router.post('/', PrizeController.create);
+router.put('/:id', PrizeController.update);
+router.delete('/:id', PrizeController.delete);
 
-router.post('/:id/zdjecie', authMiddleware, checkRole(['administrator', 'nauczyciel']), upload.single('zdjecie'), PrizeController.uploadImage);
-router.get('/:id/zdjecie', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), PrizeController.getImage);
-router.delete('/:id/zdjecie', authMiddleware, checkRole(['administrator', 'nauczyciel']), PrizeController.deleteImage);
+router.post('/:id/zdjecie', upload.single('zdjecie'), PrizeController.uploadImage);
+router.get('/:id/zdjecie', PrizeController.getImage);
+router.delete('/:id/zdjecie', PrizeController.deleteImage);
 
-router.get('/uczen/:studentId', authMiddleware, checkOwnershipOrRole(['administrator', 'nauczyciel', 'opiekun'], 'studentId'), PrizeController.getStudentPrizes);
-router.post('/redeem', authMiddleware, checkRole(['uczen']), PrizeController.redeemPrize);
+router.get('/uczen/:studentId', PrizeController.getStudentPrizes);
+router.post('/redeem', PrizeController.redeemPrize);
 
 module.exports = router;

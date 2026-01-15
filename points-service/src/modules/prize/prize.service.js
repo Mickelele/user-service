@@ -29,11 +29,11 @@ class PrizeService {
     }
 
     async redeemPrize(id_ucznia, id_nagrody) {
-       
+        // Sprawdź czy nagroda istnieje
         const nagroda = await PrizeRepository.findById(id_nagrody);
         if (!nagroda) throw new Error('Nagroda nie znaleziona');
 
-      
+        // Sprawdź saldo ucznia
         const uczen = await PointsRepository.findById(id_ucznia);
         if (!uczen) throw new Error('Uczeń nie znaleziony');
 
@@ -41,10 +41,10 @@ class PrizeService {
             throw new Error('Niewystarczająca liczba punktów');
         }
 
-       
+        // Odejmij punkty
         await PointsRepository.subtractPoints(id_ucznia, nagroda.koszt);
 
-        
+        // Dodaj wpis do tabeli relacji
         const relacja = await PrizeRepository.redeemPrize(id_ucznia, id_nagrody);
 
         return {

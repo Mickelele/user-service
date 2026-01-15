@@ -2,7 +2,7 @@ const Uczen = require('../modules/points/points.model');
 const Nagroda = require('../modules/prize/prize.model');
 const RelacjaNagrodaUczen = require('../modules/prize/prizeStudent.model');
 
-
+// Relacja Many-to-Many: Uczen <-> Nagroda przez RelacjaNagrodaUczen
 Uczen.belongsToMany(Nagroda, {
     through: RelacjaNagrodaUczen,
     foreignKey: 'id_ucznia',
@@ -17,7 +17,7 @@ Nagroda.belongsToMany(Uczen, {
     as: 'uczniowie'
 });
 
-
+// Relacje dla bezpośredniego dostępu do tabeli asocjacyjnej
 RelacjaNagrodaUczen.belongsTo(Uczen, {
     foreignKey: 'id_ucznia',
     as: 'uczen'
