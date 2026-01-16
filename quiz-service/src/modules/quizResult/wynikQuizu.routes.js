@@ -6,7 +6,7 @@ const { checkRole, checkGuardianStudent, checkTeacherStudent } = require('../../
 
 router.get('/', authMiddleware, checkRole(['administrator', 'nauczyciel']), WynikQuizuController.getAll);
 router.get('/uczen/:studentId', authMiddleware, checkRole(['administrator', 'opiekun', 'uczen', 'nauczyciel']), checkGuardianStudent('studentId'), checkTeacherStudent('studentId'), WynikQuizuController.getByStudent);
-router.get('/quiz/:quizId', authMiddleware, checkRole(['administrator', 'nauczyciel']), WynikQuizuController.getByQuiz);
+router.get('/quiz/:quizId', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), WynikQuizuController.getByQuiz);
 router.get('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel', 'uczen']), WynikQuizuController.getOne);
 router.post('/', authMiddleware, checkRole(['administrator', 'uczen']), WynikQuizuController.create);
 router.put('/:id', authMiddleware, checkRole(['administrator']), WynikQuizuController.update);
