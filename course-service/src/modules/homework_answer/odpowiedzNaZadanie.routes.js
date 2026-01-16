@@ -6,10 +6,10 @@ const { checkRole } = require('../middleware/roleMiddleware');
 
 router.get('/', authMiddleware, HomeworkAnswerController.getAll);
 
-router.post('/dodaj', authMiddleware, HomeworkAnswerController.create);
+router.post('/dodaj', authMiddleware, checkRole(['uczen']), HomeworkAnswerController.create);
 router.get('/moja-odpowiedz/:id_zadania', authMiddleware, HomeworkAnswerController.getStudentAnswer);
 
-router.get('/zadanie/:id_zadania', authMiddleware, HomeworkAnswerController.getAnswers);
+router.get('/zadanie/:id_zadania', authMiddleware, checkRole(['opiekun']), HomeworkAnswerController.getAnswers);
 router.put('/ocen/:id_odpowiedzi', authMiddleware, HomeworkAnswerController.gradeAnswer);
 
 router.get('/moje-prace', authMiddleware, HomeworkAnswerController.getMyHomeworks);

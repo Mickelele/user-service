@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const UczenController = require('./student.controller');
 const authMiddleware = require('../middleware/authMiddleware');
+const { checkRole, checkOwnership } = require('../middleware/roleMiddleware');
 
 router.get('/', UczenController.getAll);
-router.get('/:id', UczenController.getOne);
+router.get('/:id', authMiddleware, checkRole(['uczen']), checkOwnership('id'), UczenController.getOne);
 
 
 router.post('/', UczenController.create);

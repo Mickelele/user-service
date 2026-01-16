@@ -7,7 +7,7 @@ const { checkRole } = require('../middleware/roleMiddleware');
 router.get('/technical-reports', LessonController.getTechnicalReports);
 router.delete('/technical-reports/:id', LessonController.clearTechnicalReport);
 
-router.get('/:groupId/zajecia', authMiddleware, checkRole(['opiekun']), LessonController.getAllForGroup);
+router.get('/:groupId/zajecia', authMiddleware, checkRole(['opiekun', 'uczen']), LessonController.getAllForGroup);
 router.post('/:groupId/zajecia/dodaj', LessonController.create);
 
 router.post('/:groupId/zajecia/auto-create', LessonController.createLessonsForGroup);

@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const GroupController = require('./group.controller');
-const authMiddleware = require('../middleware/authMiddleware')
-
+const authMiddleware = require('../middleware/authMiddleware');
+const { checkRole } = require('../middleware/roleMiddleware');
 
 router.get('/test/test', GroupController.test);
 
 router.get('/', GroupController.getAll);
-router.get('/:id', GroupController.getOne);
+router.get('/:id', authMiddleware, checkRole(['opiekun', 'uczen']), GroupController.getOne);
 router.get('/:id/uczniowie', GroupController.getStudents);
 router.post('/dodajGrupe', GroupController.create);
 router.put('/aktualizujGrupe/:id', GroupController.update);
