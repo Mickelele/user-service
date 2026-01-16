@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const PrizeController = require('./prize.controller');
 const authMiddleware = require('../../middleware/authMiddleware');
+const { checkRole } = require('../../middleware/roleMiddleware');
 
 const upload = multer({ 
     storage: multer.memoryStorage(),
@@ -24,7 +25,7 @@ router.post('/:id/zdjecie', upload.single('zdjecie'), PrizeController.uploadImag
 router.get('/:id/zdjecie', PrizeController.getImage);
 router.delete('/:id/zdjecie', PrizeController.deleteImage);
 
-router.get('/uczen/:studentId', PrizeController.getStudentPrizes);
-router.post('/redeem', PrizeController.redeemPrize);
+router.get('/uczen/:studentId', authMiddleware, checkRole(['uczen']), PrizeController.getStudentPrizes);
+router.post('/redeem', authMiddleware, checkRole(['uczen']), PrizeController.redeemPrize);
 
 module.exports = router;
