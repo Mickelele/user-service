@@ -7,7 +7,7 @@ const { checkRole, checkOwnership } = require('../middleware/roleMiddleware');
 router.get('/technical-reports', authMiddleware, checkRole(['administrator']), LessonController.getTechnicalReports);
 router.delete('/technical-reports/:id', authMiddleware, checkRole(['administrator']), LessonController.clearTechnicalReport);
 
-router.get('/:groupId/zajecia', authMiddleware, checkRole(['administrator', 'opiekun', 'uczen']), LessonController.getAllForGroup);
+router.get('/:groupId/zajecia', LessonController.getAllForGroup);
 router.post('/:groupId/zajecia/dodaj', authMiddleware, checkRole(['administrator']), LessonController.create);
 
 router.post('/:groupId/zajecia/auto-create', authMiddleware, checkRole(['administrator']), LessonController.createLessonsForGroup);
