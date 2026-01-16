@@ -18,7 +18,7 @@ router.put('/obecnosci/:id', authMiddleware, checkRole(['administrator', 'nauczy
 
 router.delete('/obecnosci/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.delete);
 
-router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['administrator', 'opiekun', 'uczen', 'nauczyciel']), checkGuardianStudent('userId'), checkTeacherStudent('userId'), PresenceController.getForUser);
+router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['administrator', 'opiekun', 'uczen', 'nauczyciel']), PresenceController.getForUser);
 
 router.get('/grupa/:id_grupy/obecnosci', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.getByGroupId);
 
