@@ -13,11 +13,11 @@ const upload = multer({
 });
 
 router.get('/test', PrizeController.test);
-router.get('/history/all', PrizeController.getPrizeHistory);
+router.get('/history/all', authMiddleware, checkRole(['administrator']), PrizeController.getPrizeHistory);
 
-router.get('/', authMiddleware, checkRole(['uczen']), PrizeController.getAll);
-router.get('/:id', PrizeController.getOne);
-router.post('/', PrizeController.create);
+router.get('/', authMiddleware, checkRole(['administrator', 'uczen']), PrizeController.getAll);
+router.get('/:id', authMiddleware, checkRole(['administrator', 'uczen']), PrizeController.getOne);
+router.post('/', authMiddleware, checkRole(['administrator']), PrizeController.create);
 router.put('/:id', PrizeController.update);
 router.delete('/:id', PrizeController.delete);
 

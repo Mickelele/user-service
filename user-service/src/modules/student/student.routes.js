@@ -4,18 +4,18 @@ const UczenController = require('./student.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 const { checkRole, checkOwnership } = require('../middleware/roleMiddleware');
 
-router.get('/', UczenController.getAll);
-router.get('/:id', authMiddleware, checkRole(['uczen', 'nauczyciel']), checkOwnership('id'), UczenController.getOne);
+router.get('/', authMiddleware, checkRole(['administrator', 'nauczyciel', 'opiekun', 'uczen']), UczenController.getAll);
+router.get('/:id', authMiddleware, checkRole(['administrator', 'uczen', 'nauczyciel']), checkOwnership('id'), UczenController.getOne);
 
 
-router.post('/', UczenController.create);
+router.post('/', authMiddleware, checkRole(['administrator']), UczenController.create);
 
-router.put('/:id', UczenController.update);
+router.put('/:id', authMiddleware, checkRole(['administrator']), UczenController.update);
 
-router.delete('/:id', UczenController.delete);
+router.delete('/:id', authMiddleware, checkRole(['administrator']), UczenController.delete);
 
-router.post('/zapiszNaGrupe', authMiddleware, UczenController.zapiszNaGrupe);
-router.patch('/:uczenId/assign-guardian', authMiddleware, UczenController.assignGuardian);
-router.patch('/:id/punkty', authMiddleware, checkRole(['nauczyciel']), UczenController.adjustPoints);
+router.post('/zapiszNaGrupe', authMiddleware, checkRole(['administrator']), UczenController.zapiszNaGrupe);
+router.patch('/:uczenId/assign-guardian', authMiddleware, checkRole(['administrator']), UczenController.assignGuardian);
+router.patch('/:id/punkty', authMiddleware, checkRole(['administrator', 'nauczyciel']), UczenController.adjustPoints);
 
 module.exports = router;

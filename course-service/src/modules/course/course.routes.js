@@ -4,14 +4,14 @@ const CourseController = require('./course.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 const { checkRole } = require('../middleware/roleMiddleware');
 
-router.get('/', CourseController.getAll);
-router.get('/:id', authMiddleware, checkRole(['nauczyciel']), CourseController.getOne);
-router.post('/dodajKurs', CourseController.create);
-router.put('/aktualizujKurs/:id', CourseController.update);
-router.delete('/usunKurs/:id', CourseController.delete);
-router.get('/:id/grupy', CourseController.findGroupsByCourseId);
+router.get('/', authMiddleware, checkRole(['administrator', 'nauczyciel', 'opiekun', 'uczen']), CourseController.getAll);
+router.get('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), CourseController.getOne);
+router.post('/dodajKurs', authMiddleware, checkRole(['administrator']), CourseController.create);
+router.put('/aktualizujKurs/:id', authMiddleware, checkRole(['administrator']), CourseController.update);
+router.delete('/usunKurs/:id', authMiddleware, checkRole(['administrator']), CourseController.delete);
+router.get('/:id/grupy', authMiddleware, checkRole(['administrator', 'nauczyciel']), CourseController.findGroupsByCourseId);
 
 
-router.get('/nauczyciel/moje-kursy', authMiddleware, checkRole(['nauczyciel']), CourseController.getMyCourses);
+router.get('/nauczyciel/moje-kursy', authMiddleware, checkRole(['administrator', 'nauczyciel']), CourseController.getMyCourses);
 
 module.exports = router;
