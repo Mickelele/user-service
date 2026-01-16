@@ -5,24 +5,24 @@ const PresenceController = require('./presence.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 const { checkRole, checkGuardianStudent, checkTeacherStudent } = require('../middleware/roleMiddleware');
 
-router.get('/:lessonId/obecnosci', authMiddleware, checkRole(['nauczyciel']), PresenceController.getAllForLesson);
+router.get('/:lessonId/obecnosci', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.getAllForLesson);
 
-router.get('/obecnosci/:id', PresenceController.getOne);
+router.get('/obecnosci/:id', authMiddleware, checkRole(['administrator', 'nauczyciel', 'opiekun', 'uczen']), PresenceController.getOne);
 
-router.post('/:lessonId/obecnosci/dodaj', authMiddleware, checkRole(['nauczyciel']), (req, res, next) => {
+router.post('/:lessonId/obecnosci/dodaj', authMiddleware, checkRole(['administrator', 'nauczyciel']), (req, res, next) => {
     req.body.id_zajec = req.params.lessonId;
     next();
 }, PresenceController.create);
 
-router.put('/obecnosci/:id', PresenceController.update);
+router.put('/obecnosci/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.update);
 
-router.delete('/obecnosci/:id', authMiddleware, checkRole(['nauczyciel']), PresenceController.delete);
+router.delete('/obecnosci/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.delete);
 
-router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['opiekun', 'uczen', 'nauczyciel']), checkGuardianStudent('userId'), checkTeacherStudent('userId'), PresenceController.getForUser);
+router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['administrator', 'opiekun', 'uczen', 'nauczyciel']), checkGuardianStudent('userId'), checkTeacherStudent('userId'), PresenceController.getForUser);
 
-router.get('/grupa/:id_grupy/obecnosci', PresenceController.getByGroupId);
+router.get('/grupa/:id_grupy/obecnosci', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.getByGroupId);
 
-router.put('/obecnosci/:id/ustaw', authMiddleware, checkRole(['nauczyciel']), PresenceController.setPresence);
+router.put('/obecnosci/:id/ustaw', authMiddleware, checkRole(['administrator', 'nauczyciel']), PresenceController.setPresence);
 
 
 
