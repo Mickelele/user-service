@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const PresenceController = require('./presence.controller');
+const authMiddleware = require('../middleware/authMiddleware');
+const { checkRole, checkGuardianStudent, checkTeacherStudent } = require('../middleware/roleMiddleware');
 
 router.get('/:lessonId/obecnosci', authMiddleware, checkRole(['nauczyciel']), PresenceController.getAllForLesson);
 
@@ -15,9 +17,6 @@ router.post('/:lessonId/obecnosci/dodaj', authMiddleware, checkRole(['nauczyciel
 router.put('/obecnosci/:id', PresenceController.update);
 
 router.delete('/obecnosci/:id', authMiddleware, checkRole(['nauczyciel']), PresenceController.delete);
-
-const authMiddleware = require('../middleware/authMiddleware');
-const { checkRole, checkOwnership, checkGuardianStudent } = require('../middleware/roleMiddleware');
 
 router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['opiekun', 'uczen', 'nauczyciel']), checkGuardianStudent('userId'), checkTeacherStudent('userId'), PresenceController.getForUser);
 
