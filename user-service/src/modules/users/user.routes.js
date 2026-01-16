@@ -16,7 +16,7 @@ router.put('/updateProfile', authMiddleware, UserController.updateProfile);
 router.put('/:id', authMiddleware, checkRole(['administrator']), UserController.changeData);
 router.put('/profile/password', authMiddleware, UserController.changePassword);
 router.get('/reset-token/:token', UserController.getUserByResetToken);
-router.get('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel', 'opiekun', 'uczen']), UserController.getUserById);
+router.get('/:id', UserController.getUserById);
 
 
 router.get('/email/:email', UserController.getUserByEmail);
