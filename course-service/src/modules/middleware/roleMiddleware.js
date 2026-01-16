@@ -66,8 +66,8 @@ const checkGuardianStudent = (studentIdParamName = 'userId') => {
 
             next();
         } catch (error) {
-            console.error('Błąd weryfikacji dostępu opiekuna:', error.message);
-            return res.status(500).json({ error: 'Błąd weryfikacji dostępu' });
+            console.error('Błąd weryfikacji dostępu opiekuna:', error.response?.data || error.message);
+            return res.status(500).json({ error: 'Błąd weryfikacji dostępu', details: error.response?.data || error.message });
         }
     };
 };
