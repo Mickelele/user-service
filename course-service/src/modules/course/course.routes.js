@@ -4,7 +4,7 @@ const CourseController = require('./course.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 const { checkRole } = require('../middleware/roleMiddleware');
 
-router.get('/', authMiddleware, checkRole(['administrator', 'nauczyciel', 'opiekun', 'uczen']), CourseController.getAll);
+router.get('/', CourseController.getAll);
 router.get('/:id', authMiddleware, checkRole(['administrator', 'nauczyciel']), CourseController.getOne);
 router.post('/dodajKurs', authMiddleware, checkRole(['administrator']), CourseController.create);
 router.put('/aktualizujKurs/:id', authMiddleware, checkRole(['administrator']), CourseController.update);
