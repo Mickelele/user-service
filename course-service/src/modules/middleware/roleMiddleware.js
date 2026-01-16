@@ -76,6 +76,7 @@ const checkTeacherGroup = (groupIdParamName = 'id') => {
             return res.status(401).json({ error: 'Brak autoryzacji' });
         }
 
+        // Skip check for non-teacher roles and administrators
         if (req.user.role !== 'nauczyciel') {
             return next();
         }
@@ -117,23 +118,31 @@ const checkTeacherStudent = (studentIdParamName = 'userId') => {
             const studentId = parseInt(req.params[studentIdParamName]);
             const teacherId = req.user.id;
 
-            const Uczen = require('../../../../user-service/src/modules/student/student.model');
-            const Grupa = require('../group/group.model');
+            // Get student's group ID via API call to user-service
+            const axios = require('axios');
+            const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'https://user-service-hg4z.onrender.com';
             
-            const uczen = await Uczen.findByPk(studentId);
-            if (!uczen) {
-                return res.status(404).json({ error: 'Uczeń nie istnieje' });
+            const studentResponse = await axios.get(`${USER_SERVICE_URL}/uczniowie/${studentId}`, {
+                headers: { Authorization: req.headers.authorization }
+            });
+            
+            const student = studentResponse.data;
+            if (!student || !student.id_grupa) {
+                return res.status(403).json({ error: 'Brak dostępu do danych tego ucznia' });
             }
 
-            const grupa = await Grupa.findOne({ where: { id_grupa: uczen.id_grupa } });
+            // Check if teacher teaches this group
+            const Grupa = require('../group/group.model');
+            const grupa = await Grupa.findByPk(student.id_grupa);
+            
             if (!grupa || grupa.id_nauczyciela !== teacherId) {
                 return res.status(403).json({ error: 'Brak dostępu do danych tego ucznia' });
             }
 
             next();
         } catch (error) {
-            console.error('Błąd weryfikacji dostępu nauczyciela do ucznia:', error.message);
-            return res.status(500).json({ error: 'Błąd weryfikacji dostępu', details: error.message });
+            console.error('Błąd weryfikacji dostępu nauczyciela do ucznia:', error.response?.data || error.message);
+            return res.status(500).json({ error: 'Błąd weryfikacji dostępu', details: error.response?.data || error.message });
         }
     };
 };
