@@ -17,9 +17,9 @@ router.put('/obecnosci/:id', PresenceController.update);
 router.delete('/obecnosci/:id', PresenceController.delete);
 
 const authMiddleware = require('../middleware/authMiddleware');
-const { checkRole, checkOwnership } = require('../middleware/roleMiddleware');
+const { checkRole, checkOwnership, checkGuardianStudent } = require('../middleware/roleMiddleware');
 
-router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['opiekun', 'uczen']), checkOwnership('userId'), PresenceController.getForUser);
+router.get('/obecnosciUcznia/:userId', authMiddleware, checkRole(['opiekun', 'uczen']), checkGuardianStudent('userId'), checkOwnership('userId'), PresenceController.getForUser);
 
 router.get('/grupa/:id_grupy/obecnosci', PresenceController.getByGroupId);
 

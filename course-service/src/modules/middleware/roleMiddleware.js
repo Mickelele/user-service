@@ -29,4 +29,41 @@ const checkOwnership = (idParamName = 'id') => {
     };
 };
 
-module.exports = { checkRole, checkOwnership };
+const checkGuardianStudent = (studentIdParamName = 'userId') => {
+    return async (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ error: 'Brak autoryzacji' });
+        }
+
+        
+        if (req.user.role !== 'opiekun') {
+            return next();
+        }
+
+        try {
+            const studentId = parseInt(req.params[studentIdParamName]);
+            const guardianId = req.user.id;
+
+           
+            const axios = require('axios');
+            const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:4000';
+            const response = await axios.get(`${USER_SERVICE_URL}/opiekunowie/${guardianId}/uczniowie`, {
+                headers: { Authorization: req.headers.authorization }
+            });
+
+            const students = response.data;
+            const hasAccess = students.some(student => student.id_ucznia === studentId);
+
+            if (!hasAccess) {
+                return res.status(403).json({ error: 'Brak dostępu do danych tego ucznia' });
+            }
+
+            next();
+        } catch (error) {
+            console.error('Błąd weryfikacji dostępu opiekuna:', error.message);
+            return res.status(500).json({ error: 'Błąd weryfikacji dostępu' });
+        }
+    };
+};
+
+module.exports = { checkRole, checkOwnership, checkGuardianStudent };
