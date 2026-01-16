@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { checkRole, checkOwnership } = require('../middleware/roleMiddleware');
 
 router.get('/', TeacherController.getAll);
-router.get('/:id', authMiddleware, checkRole(['opiekun', 'nauczyciel']), checkOwnership('id'), TeacherController.getOne);
+router.get('/:id', TeacherController.getOne);
 router.post('/', TeacherController.create);
 router.put('/:id', TeacherController.update);
 router.delete('/:id', TeacherController.delete);

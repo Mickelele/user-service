@@ -7,8 +7,8 @@ const { checkRole, checkTeacherGroup } = require('../middleware/roleMiddleware')
 router.get('/test/test', GroupController.test);
 
 router.get('/', GroupController.getAll);
-router.get('/:id', authMiddleware, checkRole(['opiekun', 'uczen', 'nauczyciel']), checkTeacherGroup('id'), GroupController.getOne);
-router.get('/:id/uczniowie', authMiddleware, checkRole(['nauczyciel']), checkTeacherGroup('id'), GroupController.getStudents);
+router.get('/:id', authMiddleware, checkRole(['opiekun', 'uczen', 'nauczyciel']), GroupController.getOne);
+router.get('/:id/uczniowie', authMiddleware, checkRole(['nauczyciel']), GroupController.getStudents);
 router.post('/dodajGrupe', GroupController.create);
 router.put('/aktualizujGrupe/:id', GroupController.update);
 router.delete('/usunGrupe/:id', GroupController.delete);
