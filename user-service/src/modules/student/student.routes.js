@@ -14,7 +14,7 @@ router.put('/:id', authMiddleware, checkRole(['administrator']), UczenController
 
 router.delete('/:id', authMiddleware, checkRole(['administrator']), UczenController.delete);
 
-router.post('/zapiszNaGrupe', authMiddleware, checkRole(['administrator']), UczenController.zapiszNaGrupe);
+router.post('/zapiszNaGrupe', authMiddleware, checkRole(['administrator', 'opiekun']), UczenController.zapiszNaGrupe);
 router.patch('/:uczenId/assign-guardian', authMiddleware, checkRole(['administrator']), UczenController.assignGuardian);
 router.patch('/:id/punkty', authMiddleware, checkRole(['administrator', 'nauczyciel']), UczenController.adjustPoints);
 
