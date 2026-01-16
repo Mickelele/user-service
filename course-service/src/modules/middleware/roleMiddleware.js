@@ -18,9 +18,7 @@ const checkOwnership = (idParamName = 'id') => {
             return res.status(401).json({ error: 'Brak autoryzacji' });
         }
 
-        const userRole = req.user.role;
-        
-        if (userRole === 'opiekun' || userRole === 'nauczyciel' || userRole === 'administrator') {
+        if (req.user.role === 'administrator') {
             return next();
         }
 
@@ -72,4 +70,72 @@ const checkGuardianStudent = (studentIdParamName = 'userId') => {
     };
 };
 
-module.exports = { checkRole, checkOwnership, checkGuardianStudent };
+const checkTeacherGroup = (groupIdParamName = 'id') => {
+    return async (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ error: 'Brak autoryzacji' });
+        }
+
+        if (req.user.role !== 'nauczyciel') {
+            return next();
+        }
+
+        try {
+            const groupId = parseInt(req.params[groupIdParamName]);
+            const teacherId = req.user.id;
+
+            const Grupa = require('../group/group.model');
+            const grupa = await Grupa.findByPk(groupId);
+
+            if (!grupa) {
+                return res.status(404).json({ error: 'Grupa nie istnieje' });
+            }
+
+            if (grupa.id_nauczyciela !== teacherId) {
+                return res.status(403).json({ error: 'Brak dostępu do tej grupy' });
+            }
+
+            next();
+        } catch (error) {
+            console.error('Błąd weryfikacji dostępu nauczyciela do grupy:', error.message);
+            return res.status(500).json({ error: 'Błąd weryfikacji dostępu', details: error.message });
+        }
+    };
+};
+
+const checkTeacherStudent = (studentIdParamName = 'userId') => {
+    return async (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({ error: 'Brak autoryzacji' });
+        }
+
+        if (req.user.role !== 'nauczyciel') {
+            return next();
+        }
+
+        try {
+            const studentId = parseInt(req.params[studentIdParamName]);
+            const teacherId = req.user.id;
+
+            const Uczen = require('../../../../user-service/src/modules/student/student.model');
+            const Grupa = require('../group/group.model');
+            
+            const uczen = await Uczen.findByPk(studentId);
+            if (!uczen) {
+                return res.status(404).json({ error: 'Uczeń nie istnieje' });
+            }
+
+            const grupa = await Grupa.findOne({ where: { id_grupa: uczen.id_grupa } });
+            if (!grupa || grupa.id_nauczyciela !== teacherId) {
+                return res.status(403).json({ error: 'Brak dostępu do danych tego ucznia' });
+            }
+
+            next();
+        } catch (error) {
+            console.error('Błąd weryfikacji dostępu nauczyciela do ucznia:', error.message);
+            return res.status(500).json({ error: 'Błąd weryfikacji dostępu', details: error.message });
+        }
+    };
+};
+
+module.exports = { checkRole, checkOwnership, checkGuardianStudent, checkTeacherGroup, checkTeacherStudent };

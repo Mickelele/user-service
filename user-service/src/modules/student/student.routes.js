@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 const { checkRole, checkOwnership } = require('../middleware/roleMiddleware');
 
 router.get('/', UczenController.getAll);
-router.get('/:id', authMiddleware, checkRole(['uczen']), checkOwnership('id'), UczenController.getOne);
+router.get('/:id', authMiddleware, checkRole(['uczen', 'nauczyciel']), checkOwnership('id'), UczenController.getOne);
 
 
 router.post('/', UczenController.create);
@@ -16,6 +16,6 @@ router.delete('/:id', UczenController.delete);
 
 router.post('/zapiszNaGrupe', authMiddleware, UczenController.zapiszNaGrupe);
 router.patch('/:uczenId/assign-guardian', authMiddleware, UczenController.assignGuardian);
-router.patch('/:id/punkty', authMiddleware, UczenController.adjustPoints);
+router.patch('/:id/punkty', authMiddleware, checkRole(['nauczyciel']), UczenController.adjustPoints);
 
 module.exports = router;

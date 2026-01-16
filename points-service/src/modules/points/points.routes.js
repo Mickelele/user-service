@@ -5,8 +5,8 @@ const authMiddleware = require('../../middleware/authMiddleware');
 const { checkRole, checkOwnership } = require('../../middleware/roleMiddleware');
 
 router.get('/uczniowie', PointsController.getAllStudents);
-router.get('/uczen/:id', authMiddleware, checkRole(['uczen']), checkOwnership('id'), PointsController.getStudentById);
-router.get('/uczen/:id/saldo', authMiddleware, checkRole(['uczen']), checkOwnership('id'), PointsController.getStudentPoints);
+router.get('/uczen/:id', authMiddleware, checkRole(['uczen', 'nauczyciel']), checkOwnership('id'), PointsController.getStudentById);
+router.get('/uczen/:id/saldo', authMiddleware, checkRole(['uczen', 'nauczyciel']), checkOwnership('id'), PointsController.getStudentPoints);
 router.post('/add', PointsController.addPoints);
 router.post('/subtract', PointsController.subtractPoints);
 router.post('/set', PointsController.setPoints);

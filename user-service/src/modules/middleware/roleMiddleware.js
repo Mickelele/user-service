@@ -18,9 +18,7 @@ const checkOwnership = (idParamName = 'id') => {
             return res.status(401).json({ error: 'Brak autoryzacji' });
         }
 
-        const userRole = req.user.role;
-        
-        if (userRole === 'opiekun' || userRole === 'nauczyciel' || userRole === 'administrator') {
+        if (req.user.role === 'administrator') {
             return next();
         }
 

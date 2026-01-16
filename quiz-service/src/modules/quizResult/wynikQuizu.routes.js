@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const WynikQuizuController = require('./wynikQuizu.controller');
 const authMiddleware = require('../../middleware/authMiddleware');
-const { checkRole, checkOwnership, checkGuardianStudent } = require('../../middleware/roleMiddleware');
+const { checkRole, checkGuardianStudent, checkTeacherStudent } = require('../../middleware/roleMiddleware');
 
 router.get('/', authMiddleware, WynikQuizuController.getAll);
-router.get('/uczen/:studentId', authMiddleware, checkRole(['opiekun', 'uczen']), checkGuardianStudent('studentId'), checkOwnership('studentId'), WynikQuizuController.getByStudent);
+router.get('/uczen/:studentId', authMiddleware, checkRole(['opiekun', 'uczen', 'nauczyciel']), checkGuardianStudent('studentId'), checkTeacherStudent('studentId'), WynikQuizuController.getByStudent);
 router.get('/quiz/:quizId', authMiddleware, WynikQuizuController.getByQuiz);
 router.get('/:id', authMiddleware, WynikQuizuController.getOne);
 router.post('/', authMiddleware, checkRole(['uczen']), WynikQuizuController.create);
