@@ -46,6 +46,24 @@ const HomeworkController = {
         }
     },
 
+    async update(req, res) {
+        try {
+            const homework = await HomeworkService.updateHomework(req.params.id, req.body);
+            res.status(200).json(homework);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+    async delete(req, res) {
+        try {
+            await HomeworkService.deleteHomework(req.params.id);
+            res.status(204).send();
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
+    }
+
 
 };
 

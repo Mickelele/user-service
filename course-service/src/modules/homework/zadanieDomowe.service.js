@@ -16,6 +16,14 @@ class HomeworkService {
         return await HomeworkRepository.getAllHomeworkByGroupIdWithStatus(id_grupy, id_ucznia);
     }
 
+    async updateHomework(id_zadania, data) {
+        return await HomeworkRepository.updateHomework(id_zadania, data);
+    }
+
+    async deleteHomework(id_zadania) {
+        return await HomeworkRepository.deleteHomework(id_zadania);
+    }
+
 
 }
 

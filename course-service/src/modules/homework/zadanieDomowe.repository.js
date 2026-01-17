@@ -85,6 +85,22 @@ const HomeworkRepository = {
         );
 
         return results;
+    },
+
+    async updateHomework(id_zadania, data) {
+        const homework = await ZadanieDomowe.findByPk(id_zadania);
+        if (!homework) {
+            throw new Error('Zadanie domowe nie znalezione');
+        }
+        return await homework.update(data);
+    },
+
+    async deleteHomework(id_zadania) {
+        const homework = await ZadanieDomowe.findByPk(id_zadania);
+        if (!homework) {
+            throw new Error('Zadanie domowe nie znalezione');
+        }
+        return await homework.destroy();
     }
 
 
