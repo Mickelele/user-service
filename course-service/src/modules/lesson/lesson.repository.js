@@ -80,6 +80,14 @@ const LessonRepository = {
         if (!zaj) throw new Error('Zajęcia nie znalezione');
         await zaj.update({ uwaga_do_sprzetu: null });
         return zaj;
+    },
+
+    async updateRoomForGroup(id_grupy, Sala_id_sali) {
+        const result = await Zajecia.update(
+            { Sala_id_sali },
+            { where: { id_grupy } }
+        );
+        return result[0];
     }
 };
 

@@ -37,6 +37,17 @@ class LessonService {
         return await LessonRepository.clearTechnicalReport(id);
     }
 
+    async updateRoomForGroup(id_grupy, Sala_id_sali) {
+        if (!Sala_id_sali) {
+            throw new Error('ID sali jest wymagane');
+        }
+        const updatedCount = await LessonRepository.updateRoomForGroup(id_grupy, Sala_id_sali);
+        if (updatedCount === 0) {
+            throw new Error('Nie znaleziono zajęć dla tej grupy');
+        }
+        return { message: `Zaktualizowano salę w ${updatedCount} zajęciach`, updatedCount };
+    }
+
     async createLessonsForGroup(id_grupa) {
         try {
             const grupa = await Grupa.findByPk(id_grupa, {

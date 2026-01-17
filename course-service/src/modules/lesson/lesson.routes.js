@@ -9,6 +9,7 @@ router.delete('/technical-reports/:id', authMiddleware, checkRole(['administrato
 
 router.get('/:groupId/zajecia', LessonController.getAllForGroup);
 router.post('/:groupId/zajecia/dodaj', authMiddleware, checkRole(['administrator']), LessonController.create);
+router.patch('/:groupId/zajecia/update-room', authMiddleware, checkRole(['administrator']), LessonController.updateRoomForGroup);
 
 router.post('/:groupId/zajecia/auto-create', authMiddleware, checkRole(['administrator']), LessonController.createLessonsForGroup);
 

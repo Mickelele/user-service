@@ -118,6 +118,17 @@ const LessonController = {
             console.error(err);
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async updateRoomForGroup(req, res) {
+        try {
+            const { groupId } = req.params;
+            const { Sala_id_sali } = req.body;
+            const result = await LessonService.updateRoomForGroup(groupId, Sala_id_sali);
+            res.json(result);
+        } catch (err) {
+            res.status(400).json({ error: err.message });
+        }
     }
 
 };
