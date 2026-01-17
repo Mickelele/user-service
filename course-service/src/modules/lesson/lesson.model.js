@@ -15,7 +15,7 @@ Zajecia.init({
     },
     Sala_id_sali: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'sala_id_sali'
     },
     tematZajec: {

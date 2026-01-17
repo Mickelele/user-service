@@ -87,7 +87,7 @@ class LessonService {
                 if (currentDate.getDay() === dzienTygodniaNumer) {
                     const zajecie = {
                         id_grupy: id_grupa,
-                        Sala_id_sali: 1,
+                        Sala_id_sali: null,
                         tematZajec: "Brak",
                         data: new Date(currentDate),
                         notatki_od_nauczyciela: "Brak"
