@@ -101,6 +101,23 @@ const UczenController = {
             console.error('Błąd przy dostosowywaniu punktów:', err);
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async changePseudonim(req, res) {
+        try {
+            const { id } = req.params;
+            const { pseudonim } = req.body;
+            
+            if (!pseudonim || pseudonim.trim() === '') {
+                return res.status(400).json({ error: 'Pseudonim nie może być pusty' });
+            }
+            
+            const updated = await UczenService.changePseudonim(id, pseudonim.trim());
+            res.json(updated);
+        } catch (err) {
+            console.error('Błąd przy zmianie pseudonimu:', err);
+            res.status(400).json({ error: err.message });
+        }
     }
 };
 

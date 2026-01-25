@@ -114,6 +114,10 @@ class UczenService {
     async adjustPoints(id, delta) {
         return await UczenRepository.adjustPoints(id, delta);
     }
+
+    async changePseudonim(id, pseudonim) {
+        return await UczenRepository.changePseudonim(id, pseudonim);
+    }
 }
 
 module.exports = new UczenService();

@@ -42,6 +42,12 @@ const UczenRepository = {
         
         await uczen.save();
         return uczen;
+    },
+
+    async changePseudonim(id, pseudonim) {
+        const uczen = await Uczen.findByPk(id);
+        if (!uczen) throw new Error('Uczeń nie znaleziony');
+        return await uczen.update({ pseudonim });
     }
 };
 

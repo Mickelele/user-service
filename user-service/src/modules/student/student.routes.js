@@ -17,5 +17,6 @@ router.delete('/:id', authMiddleware, checkRole(['administrator']), UczenControl
 router.post('/zapiszNaGrupe', authMiddleware, checkRole(['administrator', 'opiekun']), UczenController.zapiszNaGrupe);
 router.patch('/:uczenId/assign-guardian', authMiddleware, checkRole(['administrator']), UczenController.assignGuardian);
 router.patch('/:id/punkty', authMiddleware, checkRole(['administrator', 'nauczyciel']), UczenController.adjustPoints);
+router.patch('/:id/pseudonim', authMiddleware, checkRole(['administrator', 'uczen']), checkOwnership('id'), UczenController.changePseudonim);
 
 module.exports = router;
