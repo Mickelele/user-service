@@ -2,6 +2,7 @@ require('dotenv').config({ path: __dirname + '/../.env' });
 
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const authRoutes = require('./auth/auth.routes');
 
 
@@ -12,6 +13,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
+app.use(cookieParser());
 app.use(express.json());
 
 app.use('/auth', authRoutes);

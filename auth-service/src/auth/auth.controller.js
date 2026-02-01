@@ -13,7 +13,20 @@ const AuthController = {
     async login(req, res) {
         try {
             const result = await AuthService.login(req.body);
-            res.status(200).json(result);
+            
+            // Ustawienie tokenu w httpOnly cookie
+            res.cookie('token', result.token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+                maxAge: 2 * 60 * 60 * 1000 // 2 godziny (zgodnie z TOKEN_EXP)
+            });
+            
+            // Zwracanie tylko danych użytkownika bez tokenu
+            res.status(200).json({
+                user: result.user,
+                success: true
+            });
         } catch (err) {
             res.status(401).json({ error: err.message });
         }
@@ -65,6 +78,22 @@ const AuthController = {
             res.status(200).json(result);
         } catch (err) {
             console.error('Błąd przy resetowaniu hasła:', err);
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+    async logout(req, res) {
+        try {
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+            });
+            res.status(200).json({ 
+                success: true,
+                message: 'Wylogowano pomyślnie' 
+            });
+        } catch (err) {
             res.status(400).json({ error: err.message });
         }
     }

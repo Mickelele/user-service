@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
 const { sequelize } = require('./config/db');
 const userRouter = require('./modules/users/user.routes');
 const teacherRouter = require('./modules/teacher/teacher.routes');
@@ -19,6 +20,7 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use('/user', userRouter);

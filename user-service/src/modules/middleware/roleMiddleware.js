@@ -39,7 +39,7 @@ const checkGuardianStudent = (studentIdParamName = 'studentId') => {
             return res.status(401).json({ error: 'Brak autoryzacji' });
         }
 
-        // Jeśli nie jest opiekunem, przepuść dalej (może być admin/nauczyciel)
+
         if (req.user.role !== 'opiekun') {
             return next();
         }
@@ -48,7 +48,7 @@ const checkGuardianStudent = (studentIdParamName = 'studentId') => {
             const studentId = parseInt(req.params[studentIdParamName]);
             const guardianId = req.user.id;
 
-            // Pobierz uczniów opiekuna
+
             const axios = require('axios');
             const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:4000';
             const response = await axios.get(`${USER_SERVICE_URL}/opiekunowie/${guardianId}/uczniowie`, {

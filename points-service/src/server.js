@@ -1,6 +1,7 @@
 require('dotenv').config({ path: __dirname + '/../.env' });
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { sequelize } = require('./config/db');
 const pointsRoutes = require('./modules/points/points.routes');
 const prizeRoutes = require('./modules/prize/prize.routes');
@@ -15,6 +16,7 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use('/punkty', pointsRoutes);

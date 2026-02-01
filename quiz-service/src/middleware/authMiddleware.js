@@ -2,10 +2,19 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 function authMiddleware(req, res, next) {
-    const header = req.headers['authorization'];
-    if (!header) return res.status(401).json({ error: 'Brak tokena' });
-
-    const token = header.split(' ')[1];
+    let token = req.cookies?.token;
+    
+    if (!token) {
+        const header = req.headers['authorization'];
+        if (header) {
+            token = header.split(' ')[1];
+        }
+    }
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Brak tokena' });
+    }
+    
     try {
         req.user = jwt.verify(token, JWT_SECRET);
         next();

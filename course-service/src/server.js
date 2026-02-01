@@ -1,6 +1,7 @@
 require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { sequelize } = require('./config/db');
 const courseRoutes = require('./modules/course/course.routes');
 const groupRoutes = require('./modules/group/group.routes');
@@ -24,6 +25,7 @@ app.use(cors({
     credentials: true
 }));
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use('/kursy', courseRoutes);
