@@ -45,6 +45,11 @@ const AuthRepository = {
             reset_token_expire_time: null
         });
         return res.data;
+    },
+
+    async getUserById(userId) {
+        const res = await axios.get(`${USER_SERVICE_URL}/user/${userId}`);
+        return res.data;
     }
 };
 

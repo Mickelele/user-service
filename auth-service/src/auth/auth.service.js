@@ -141,6 +141,10 @@ class AuthService {
 
         return { message: 'Hasło zostało zresetowane pomyślnie' };
     }
+
+    async getUserById(userId) {
+        return await AuthRepository.getUserById(userId);
+    }
 }
 
 module.exports = new AuthService();

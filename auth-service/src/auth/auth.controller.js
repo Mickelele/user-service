@@ -96,6 +96,22 @@ const AuthController = {
         } catch (err) {
             res.status(400).json({ error: err.message });
         }
+    },
+
+    async getMe(req, res) {
+        try {
+            const user = await AuthService.getUserById(req.user.id);
+            res.status(200).json({
+                id: user.id_uzytkownika,
+                email: user.email,
+                role: user.rola,
+                imie: user.imie,
+                nazwisko: user.nazwisko
+            });
+        } catch (err) {
+            console.error('Błąd /me:', err);
+            res.status(500).json({ error: 'Błąd serwera' });
+        }
     }
 };
 
