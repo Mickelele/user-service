@@ -14,15 +14,15 @@ const AuthController = {
         try {
             const result = await AuthService.login(req.body);
             
-            // Ustawienie tokenu w httpOnly cookie
+            
             res.cookie('token', result.token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-                maxAge: 2 * 60 * 60 * 1000 // 2 godziny (zgodnie z TOKEN_EXP)
+                maxAge: 2 * 60 * 60 * 1000 
             });
             
-            // Zwracanie tylko danych użytkownika bez tokenu
+           
             res.status(200).json({
                 user: result.user,
                 success: true
