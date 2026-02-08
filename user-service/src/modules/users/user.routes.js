@@ -14,6 +14,7 @@ router.post('/uploadImage', authMiddleware, upload.single('file'), uploadUserIma
 router.get('/me', authMiddleware, UserController.getProfile);
 router.put('/updateProfile', authMiddleware, UserController.updateProfile);
 router.put('/:id', authMiddleware, checkRole(['administrator']), UserController.changeData);
+router.put('/:id/auth-update', UserController.updateUserAuthData);
 router.put('/profile/password', authMiddleware, UserController.changePassword);
 router.get('/reset-token/:token', UserController.getUserByResetToken);
 router.get('/:id', UserController.getUserById);

@@ -22,7 +22,7 @@ const AuthRepository = {
     },
 
     async updateResetToken(userId, resetToken, expireTime) {
-        const res = await axios.put(`${USER_SERVICE_URL}/user/${userId}`, {
+        const res = await axios.put(`${USER_SERVICE_URL}/user/${userId}/auth-update`, {
             reset_token: resetToken,
             reset_token_expire_time: expireTime
         });
@@ -39,7 +39,7 @@ const AuthRepository = {
     },
 
     async updatePassword(userId, hashedPassword) {
-        const res = await axios.put(`${USER_SERVICE_URL}/user/${userId}`, {
+        const res = await axios.put(`${USER_SERVICE_URL}/user/${userId}/auth-update`, {
             haslo: hashedPassword,
             reset_token: null,
             reset_token_expire_time: null

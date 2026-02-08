@@ -128,6 +128,37 @@ const UserController = {
         }
     },
 
+    async updateUserAuthData(req, res) {
+        try {
+            const { id } = req.params;
+            const allowedFields = ['haslo', 'reset_token', 'reset_token_expire_time'];
+            
+            // Filtrowanie tylko dozwolonych pól
+            const filteredData = {};
+            Object.keys(req.body).forEach(key => {
+                if (allowedFields.includes(key)) {
+                    filteredData[key] = req.body[key];
+                }
+            });
+
+            if (Object.keys(filteredData).length === 0) {
+                return res.status(400).json({ error: 'Nie podano żadnych dozwolonych pól do aktualizacji' });
+            }
+
+            const updated = await UserService.changeData(id, filteredData);
+            
+            // Zwracanie tylko potwierdzenia bez wrażliwych danych
+            res.json({ 
+                id: updated.id_uzytkownika, 
+                email: updated.email,
+                message: 'Dane uwierzytelniania zostały zaktualizowane' 
+            });
+        } catch (err) {
+            console.error('Błąd przy aktualizacji danych uwierzytelniania:', err);
+            res.status(400).json({ error: err.message });
+        }
+    },
+
     async getUserByResetToken(req, res) {
         try {
             const { token } = req.params;
