@@ -3,7 +3,19 @@ const { Resend } = require('resend');
 
 class EmailService {
     constructor() {
-        if (process.env.RESEND_API_KEY) {
+        if (process.env.EMAIL_FROM && process.env.EMAIL_FROM.includes('@gmail.com') && process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+            console.log('Używam Gmail SMTP do wysyłania emaili');
+            this.transporter = nodemailer.createTransport({
+                host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+                port: process.env.EMAIL_PORT || 587,
+                secure: false,
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASSWORD
+                }
+            });
+            this.useResend = false;
+        } else if (process.env.RESEND_API_KEY) {
             console.log('Używam Resend do wysyłania emaili');
             this.resend = new Resend(process.env.RESEND_API_KEY);
             this.useResend = true;
@@ -60,7 +72,7 @@ class EmailService {
                     `
                 });
                 console.log(`Email resetowania hasła wysłany do: ${email} (Resend)`);
-                console.log(`BACKUP TOKEN: ${resetToken}`); // Dla pewności
+                console.log(`BACKUP TOKEN: ${resetToken}`); 
                 return true;
             } catch (error) {
                 console.error('Błąd wysyłania emaila przez Resend:', error);
