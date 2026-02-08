@@ -105,6 +105,7 @@ class AuthService {
 
         try {
             await EmailService.sendPasswordResetEmail(email, resetToken);
+            console.log(`TOKEN DO RESETOWANIA: ${resetToken}`); // Zawsze loguj token
             return {
                 message: 'Email z linkiem do resetowania hasła został wysłany'
             };

@@ -39,7 +39,7 @@ class EmailService {
         if (this.useResend) {
             try {
                 await this.resend.emails.send({
-                    from: 'onboarding@resend.dev',
+                    from: process.env.EMAIL_FROM || 'noreply@dream-mist.pl',
                     to: email,
                     subject: 'Resetowanie hasła',
                     html: `
@@ -60,6 +60,7 @@ class EmailService {
                     `
                 });
                 console.log(`Email resetowania hasła wysłany do: ${email} (Resend)`);
+                console.log(`BACKUP TOKEN: ${resetToken}`); // Dla pewności
                 return true;
             } catch (error) {
                 console.error('Błąd wysyłania emaila przez Resend:', error);
