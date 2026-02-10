@@ -6,7 +6,9 @@ const axios = require('axios');
 const EmailService = require('../services/email.service');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
-const TOKEN_EXP = '2h';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'refresh_secret_different';
+const ACCESS_TOKEN_EXP = '15m';  
+const REFRESH_TOKEN_EXP = '7d';   
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3000';
 
 
@@ -66,14 +68,22 @@ class AuthService {
         
         if (!ok) throw new Error('Nieprawidłowe dane');
 
-        const token = jwt.sign({
+       
+        const accessToken = jwt.sign({
             id: user.id_uzytkownika,
             role: user.rola,
             email: user.email
-        }, JWT_SECRET, { expiresIn: TOKEN_EXP });
+        }, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXP });
+
+       
+        const refreshToken = jwt.sign({
+            id: user.id_uzytkownika,
+            type: 'refresh'
+        }, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXP });
 
         return {
-            token,
+            accessToken,
+            refreshToken,
             user: {
                 id: user.id_uzytkownika,
                 email: user.email,
@@ -92,6 +102,60 @@ class AuthService {
         }
     }
 
+    verifyRefreshToken(token) {
+        try {
+            return jwt.verify(token, JWT_REFRESH_SECRET);
+        } catch {
+            return null;
+        }
+    }
+
+    async refreshTokens(refreshToken) {
+        if (!refreshToken) {
+            throw new Error('Refresh token jest wymagany');
+        }
+
+        const decoded = this.verifyRefreshToken(refreshToken);
+        if (!decoded || decoded.type !== 'refresh') {
+            throw new Error('Nieprawidłowy refresh token');
+        }
+
+        
+        const user = await AuthRepository.findById(decoded.id);
+        if (!user) {
+            throw new Error('Użytkownik nie istnieje');
+        }
+
+   
+        const newAccessToken = jwt.sign({
+            id: user.id_uzytkownika,
+            role: user.rola,
+            email: user.email
+        }, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXP });
+
+        
+        const newRefreshToken = jwt.sign({
+            id: user.id_uzytkownika,
+            type: 'refresh'
+        }, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXP });
+
+        return {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+            user: {
+                id: user.id_uzytkownika,
+                email: user.email,
+                role: user.rola,
+                imie: user.imie,
+                nazwisko: user.nazwisko
+            }
+        };
+    }
+
+    logout() {
+        return { message: 'Wylogowano pomyślnie' };
+    }
+
     async requestPasswordReset(email) {
         const user = await AuthRepository.findByEmail(email);
         if (!user) {
@@ -105,7 +169,7 @@ class AuthService {
 
         try {
             await EmailService.sendPasswordResetEmail(email, resetToken);
-            console.log(`TOKEN DO RESETOWANIA: ${resetToken}`); // Zawsze loguj token
+            console.log(`TOKEN DO RESETOWANIA: ${resetToken}`); 
             return {
                 message: 'Email z linkiem do resetowania hasła został wysłany'
             };

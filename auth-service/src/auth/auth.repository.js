@@ -8,6 +8,15 @@ const AuthRepository = {
         return res.data;
     },
 
+    async findById(userId) {
+        try {
+            const res = await axios.get(`${USER_SERVICE_URL}/user/${userId}`);
+            return res.data;
+        } catch (err) {
+            return null;
+        }
+    },
+
     async createUser(data) {
         const userRes = await axios.post(`${USER_SERVICE_URL}/user`, data);
 

@@ -13,7 +13,21 @@ const AuthController = {
     async login(req, res) {
         try {
             const result = await AuthService.login(req.body);
-            res.status(200).json(result);
+            
+           
+            res.cookie('refreshToken', result.refreshToken, {
+                httpOnly: true,        
+                secure: process.env.NODE_ENV === 'production',  
+                sameSite: 'strict',   
+                maxAge: 7 * 24 * 60 * 60 * 1000, 
+                path: '/auth/'        
+            });
+
+           
+            res.status(200).json({
+                accessToken: result.accessToken,  
+                user: result.user
+            });
         } catch (err) {
             res.status(401).json({ error: err.message });
         }
@@ -65,6 +79,49 @@ const AuthController = {
             res.status(200).json(result);
         } catch (err) {
             console.error('Błąd przy resetowaniu hasła:', err);
+            res.status(400).json({ error: err.message });
+        }
+    },
+
+    async refresh(req, res) {
+        try {
+            const refreshToken = req.cookies.refreshToken;
+            if (!refreshToken) {
+                return res.status(401).json({ error: 'Refresh token nie znaleziony' });
+            }
+
+            const result = await AuthService.refreshTokens(refreshToken);
+            
+         
+            res.cookie('refreshToken', result.refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 7 * 24 * 60 * 60 * 1000, 
+                path: '/auth/'
+            });
+
+            
+            res.status(200).json({
+                accessToken: result.accessToken,
+                user: result.user
+            });
+        } catch (err) {
+            console.error('Błąd przy odświeżaniu tokena:', err);
+            res.status(401).json({ error: err.message });
+        }
+    },
+
+    async logout(req, res) {
+        try {
+            res.clearCookie('refreshToken', {
+                path: '/auth/'
+            });
+            
+            const result = AuthService.logout();
+            res.status(200).json(result);
+        } catch (err) {
+            console.error('Błąd przy wylogowaniu:', err);
             res.status(400).json({ error: err.message });
         }
     }
