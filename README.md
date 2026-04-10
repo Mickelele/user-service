@@ -108,12 +108,12 @@ Link: https://github.com/Mickelele/frontend-public
 
 
 # Diagram bazy danych
-![Diagram bazy danych](diagram.svg)
+![Diagram bazy danych](diagram.png)
 
 
 
 # Pełna dokumentacja:
-[tekst linku](Dokumentacja.pdf)
+[Link do dokumentacji: ](Dokumentacja.pdf)
 
 
 
