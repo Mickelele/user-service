@@ -72,18 +72,20 @@ NEXT_PUBLIC_COURSE_API_URL=
 NEXT_PUBLIC_POINTS_API_URL=
 NEXT_PUBLIC_QUIZ_API_URL=
 NEXT_PUBLIC_USER_API_URL=
-
+```
 
 
 🖥️ Zmienne środowiskowe – backend
 
 Plik .env:
 
+```
 DATABASE_URL=
 FRONTEND_URL=
 JWT_SECRET=
 NODE_ENV=
 PORT=
+```
 
 Opis:
 
