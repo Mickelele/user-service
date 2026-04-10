@@ -113,7 +113,7 @@ Link: https://github.com/Mickelele/frontend-public
 
 
 # Pełna dokumentacja:
-[Link do dokumentacji: ](Dokumentacja.pdf)
+[Link do dokumentacji](Dokumentacja.pdf)
 
 
 
