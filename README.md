@@ -103,7 +103,8 @@ baza danych: PostgreSQL (Neon),
 w środowisku produkcyjnym połączenie odbywa się przez SSL.
 
 
-
+# Frontend
+Link: https://github.com/Mickelele/frontend-public
 
 
 # Diagram bazy danych
@@ -111,7 +112,7 @@ w środowisku produkcyjnym połączenie odbywa się przez SSL.
 
 
 
-#Pełna dokumentacja:
+# Pełna dokumentacja:
 [tekst linku](/dokumentacja)
 
 
